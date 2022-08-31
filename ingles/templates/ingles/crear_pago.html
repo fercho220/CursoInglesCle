@@ -6,8 +6,8 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-     <form action="{% url 'curso:crear_pago'%}" method="POST">
-         {% csrf_token %}
+        <form action="{% url 'curso:crear_pago'%}" method="POST">
+            {% csrf_token %}
         <div class="modal-body">
             {{ form.as_p }}
         </div>
@@ -16,6 +16,5 @@
             <button class="btn btn-outline-primary" type="submit">Confirmar</button>
         </div>
     </form>
-       
     </div>
 </div>

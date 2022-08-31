@@ -258,7 +258,7 @@ class ListadoPagoE(LoginRequiredMixin, View):
     template_name = 'ingles/listar_pagos.html'
     
     def get_queryset(self):
-        return self.model.objects.filter(estado = True)
+        return self.model.objects.filter(usuario =self.request.user.username )
     
     def get_context_data(self, **kwargs):
         contexto = {}
@@ -279,11 +279,23 @@ class ActualizarPago(LoginRequiredMixin, SuperUsuarioMixin, UpdateView):
         context['pagos']=Pago.objects.filter(estado = True)
         return context
 
-class CrearPago(LoginRequiredMixin, SuperUsuarioMixin, CreateView):
+class CrearPago(LoginRequiredMixin, CreateView):
     model = Pago
     template_name = 'ingles/crear_pago.html'
     form_class = PagoForm
     success_url = reverse_lazy('curso:listar_pago')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['pagos']=Pago.objects.filter(estado = True)  
+        return context
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.idestudiante = self.request.idestudiante
+        self.object.usuario = self.request.user.username
+        self.object.save()
+        return super(CrearPago, self).form_valid(form)
 
 class EliminarPago(LoginRequiredMixin, SuperUsuarioMixin, DeleteView):
     model = Pago

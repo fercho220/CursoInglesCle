@@ -15,7 +15,7 @@ class Aula(models.Model):
 
 class Estado(models.Model):
     idestado = models.AutoField(db_column='IdEstado', primary_key=True)  # Field name made lowercase.
-    estado = models.CharField(db_column='Estado',default = "Pendiente", max_length=25, blank=True, null=True)  # Field name made lowercase.
+    estado = models.CharField(db_column='Estado', max_length=25, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         verbose_name = 'Estado'
@@ -119,9 +119,10 @@ class Pago(models.Model):
     fechapago = models.DateField(db_column='FechaPago', blank=True, null=True)  # Field name made lowercase.
     #fechasist = models.DateField(db_column='FechaSist', blank=True, null=True)  # Field name made lowercase.
     fechasist = models.DateTimeField(db_column='FechaSist', auto_now_add=True)
-    idestado = models.ForeignKey(Estado, on_delete=models.CASCADE,db_column='idestado', blank=True, null=True)  # Field name made lowercase.
+    idestado = models.ForeignKey(Estado, on_delete=models.CASCADE,db_column='idestado',default = 1, blank=True, null=True)  # Field name made lowercase.
     monto = models.DecimalField(db_column='Monto', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
     usuario =  models.CharField(blank=True, db_column='Usuario', max_length=25, null=True)  # Field name made lowercase.
+    # usuario =models.OneToOneField(User, on_delete=models.CASCADE, db_column='Usuario', default=19)
     estado = models.BooleanField(default = True, verbose_name = 'Estado')
     class Meta:
         verbose_name = 'Pago'
