@@ -292,10 +292,16 @@ class CrearPago(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        self.object.idestudiante = self.request.idestudiante
         self.object.usuario = self.request.user.username
+        #self.object.idestudiante = self.request.Estudiante  
         self.object.save()
         return super(CrearPago, self).form_valid(form)
+    
+    # def get_form(self, form_class = None):
+    #     form = super().get_form(form_class)
+    #     form.fields['idestudiante'].disabled = True # Desabilitamos el campo status
+    #     form.fields['idestudiante'].choices = [('r', 'Reservado')] # Le damos solo una opcion al campo status
+    #     return form
 
 class EliminarPago(LoginRequiredMixin, SuperUsuarioMixin, DeleteView):
     model = Pago
