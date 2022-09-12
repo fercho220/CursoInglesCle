@@ -66,8 +66,8 @@
                         </div>
 
                         {% if request.user.is_superuser %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'curso:listar_estudiante' %}">Alumnos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'curso:listar_docente' %}">Docentes</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'curso:listar_estudiante' %}">Estudiantes</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'curso:listar_docente' %}">Facilitador</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'curso:listar_periodo' %}">Periodos</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'curso:listar_pago' %}">Pagos</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'curso:listar_grupos' %}">Grupos</a></li>

@@ -52,14 +52,14 @@ class Docente(models.Model):
 class Materia(models.Model):
     idmateria = models.AutoField(db_column='IdMateria', primary_key=True)  # Field name made lowercase.
     nombremateria = models.CharField(db_column='NombreMateria', max_length=25, blank=True, null=True)  # Field name made lowercase.
-    nivel = models.IntegerField(db_column='Nivel', blank=True, null=True)  # Field name made lowercase.
+    # nivel = models.IntegerField(db_column='Nivel', blank=True, null=True)  # Field name made lowercase.
     
     class Meta:
         verbose_name = 'Materia'
         verbose_name_plural = 'Materias'
 
     def __str__(self):
-        return "%s %d" % (self.nombremateria, self.nivel)
+        return "%s " % (self.nombremateria)
 
 class Modalidad(models.Model):
     idmodalidad = models.AutoField(db_column='IdModalidad', primary_key=True)
@@ -82,11 +82,11 @@ class Periodo(models.Model):
         verbose_name_plural = 'Periodos'
 
     def __str__(self):
-        return "%d %s" % (self.idperiodo, self.periodo)
+        return " %s" % ( self.periodo)
 
 def user_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-    return 'Estudiante/user_{0}_{1}/{2}'.format(instance.usuario,instance.apellidop, filename)
+    return 'Estudiante/user_{0}/{1}'.format(instance.usuario, filename)
 
 class Estudiante(models.Model):
     idestudiante = models.AutoField(db_column='IdEstudiante', primary_key=True)  # Field name made lowercase.
@@ -120,6 +120,8 @@ class Pago(models.Model):
     #fechasist = models.DateField(db_column='FechaSist', blank=True, null=True)  # Field name made lowercase.
     fechasist = models.DateTimeField(db_column='FechaSist', auto_now_add=True)
     idestado = models.ForeignKey(Estado, on_delete=models.CASCADE,db_column='idestado',default = 1, blank=True, null=True)  # Field name made lowercase.
+    pagocurso = models.FileField(upload_to=user_directory_path, blank=True, null=True)
+    pagomaterial = models.FileField(upload_to=user_directory_path, blank=True, null=True)
     monto = models.DecimalField(db_column='Monto', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
     usuario =  models.CharField(blank=True, db_column='Usuario', max_length=25, null=True)  # Field name made lowercase.
     # usuario =models.OneToOneField(User, on_delete=models.CASCADE, db_column='Usuario', default=19)

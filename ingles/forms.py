@@ -11,7 +11,7 @@ from .models import Det_Grupo, Docente, Estudiante, Grupo, Pago, Periodo
 class EstudianteForm(forms.ModelForm):
     class Meta:
         model = Estudiante
-        fields = ['nombre', 'apellidop', 'apellidom', 'nocontrol', 'idcarrera', 'pagocurso', 'pagomaterial', 'email']
+        fields = ['nombre', 'apellidop', 'apellidom', 'nocontrol', 'idcarrera', 'email']
         labels = {
             'nombre': 'Nombre del Estudiante',
             'apellidop': 'Apellido Paterno ',
@@ -19,8 +19,8 @@ class EstudianteForm(forms.ModelForm):
             'nocontrol': 'Número de Control',
             'idcarrera': 'Carrera',
             'email': 'Correo Electronico',
-            'pagocurso' : 'Vaoucher Del Pago al Curso',
-            'pagomaterial': 'Vaoucher Del Pago del Material',
+            # 'pagocurso' : 'Vaoucher Del Pago al Curso',
+            # 'pagomaterial': 'Vaoucher Del Pago del Material',
         }
         widgets = {
             'nombre': forms.TextInput(
@@ -187,7 +187,7 @@ class DateInput(forms.DateInput):
 class PagoForm(forms.ModelForm):
     class Meta:
         model = Pago
-        fields = ['foliopago', 'idmateria', 'idestudiante', 'idperiodo', 'fechapago', 'monto']
+        fields = ['foliopago', 'idmateria', 'idestudiante', 'idperiodo', 'fechapago', 'pagocurso', 'pagomaterial', 'monto']
         labels = {
             'foliopago': 'Folio del Estudiante',
             'idmateria': 'Materia del Estudiante ',
@@ -195,6 +195,8 @@ class PagoForm(forms.ModelForm):
             'idperiodo': 'Periodo',
             'fechapago': 'Fecha Del Pago',
             'monto': 'Monto',
+            'pagocurso' : 'Vaoucher Del Pago al Curso',
+            'pagomaterial': 'Vaoucher Del Pago del Material',
         }
         widgets = { 
             'idmateria': forms.Select(

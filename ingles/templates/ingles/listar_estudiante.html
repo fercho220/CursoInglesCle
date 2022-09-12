@@ -19,8 +19,8 @@ Listado de Estudiantes
             <th>Numero de Control</th>
             <th>Carrera</th>
             <th>Correo Electronico</th>
-            <th>PagoCurso</th>
-            <th>PagoMateria</th>
+            <!-- <th>PagoCurso</th>
+            <th>PagoMateria</th> -->
             <th>Opciones</th>
         </thead>
         <tbody>
@@ -33,8 +33,8 @@ Listado de Estudiantes
                     <td>{{ estudiante.nocontrol }}</td>
                     <td>{{ estudiante.idcarrera }}</td>
                     <td>{{ estudiante.email }}</td>
-                    <td>{{ estudiante.pagocurso }}</td>
-                    <td>{{ estudiante.pagomaterial }}</td>
+                    <!-- <td>{{ estudiante.pagocurso }}</td>
+                    <td>{{ estudiante.pagomaterial }}</td> -->
                     <td> 
                       <button onclick="abrir_modal_edicion('{% url 'ingles:editar_estudiante' estudiante.idestudiante %}')" class="btn btn-outline-secondary">Editar</button>
                       <a href="{% url 'ingles:eliminar_estudiante' estudiante.idestudiante %}" class="btn btn-outline-danger">Eliminar</a>

@@ -25,7 +25,7 @@ class Docentev(admin.ModelAdmin):
 admin.site.register(Docente, Docentev)
 
 class Materiav(admin.ModelAdmin):
-    list_display=('idmateria','nombremateria','nivel')
+    list_display=('idmateria','nombremateria')
 admin.site.register(Materia,Materiav)
 
 class Modalidadv(admin.ModelAdmin):
