@@ -161,4 +161,3 @@ class Det_Grupo(models.Model):
     class Meta:
         verbose_name = 'Detalle_Grupo'
         verbose_name_plural = 'Detalles_Grupos'
-

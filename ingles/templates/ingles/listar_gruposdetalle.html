@@ -18,12 +18,11 @@ Detalle de Grupos
             {% for grupodetalle in gruposdetalles %}
 
         {%if forloop.first%}
-        <h3>Periodo: {{ grupodetalle.idperiodo}}</h3>
-            <h3 >Grupo: {{grupodetalle.idgrupo}}</h3> 
+          <h3>Periodo: {{ grupodetalle.idperiodo}}</h3>
+          <h3 >Grupo: {{grupodetalle.idgrupo}}</h3> 
         </thead>
         <tbody>
         {%endif%}
-         
                 <tr>
                     <td>{{ grupodetalle.idestudiante }}</td>
                     <td>{{ grupodetalle.foliopago }}</td>
