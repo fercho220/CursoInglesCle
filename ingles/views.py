@@ -268,7 +268,7 @@ class ListadoPagoE(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):    
         return render(request, self.template_name, self.get_context_data())
 
-class ActualizarPago(LoginRequiredMixin, SuperUsuarioMixin, UpdateView):
+class ActualizarPago(LoginRequiredMixin, UpdateView):
     model = Pago
     form_class = PagoForm
     template_name = 'ingles/pago.html'

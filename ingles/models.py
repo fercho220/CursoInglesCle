@@ -96,8 +96,6 @@ class Estudiante(models.Model):
     nocontrol = models.IntegerField(db_column='NoControl', blank=True, null=True)  # Field name made lowercase.
     idcarrera = models.ForeignKey(Carrera, on_delete=models.CASCADE, db_column='IdCarrera', blank=True, null=True)  # Field name made lowercase.
     email = models.EmailField(db_column='Correo Electrónico', max_length=254, unique = True, blank=True, null=True)
-    pagocurso = models.FileField(upload_to=user_directory_path, blank=True, null=True)
-    pagomaterial = models.FileField(upload_to=user_directory_path, blank=True, null=True)
     fecha_creacion = models.DateField(db_column='Fecha de creación', auto_now = True, auto_now_add = False) 
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     estado = models.BooleanField(default = True, verbose_name = 'Estado')

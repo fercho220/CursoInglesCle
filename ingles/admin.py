@@ -42,6 +42,7 @@ admin.site.register(Estudiante, Estudiantev)
 
 class Pagov(admin.ModelAdmin):
     list_display=('foliopago','idmateria','idestudiante','idperiodo','fechapago','fechasist','idestado','monto','usuario')
+    list_filter = [ 'idmateria', 'idperiodo']
 admin.site.register(Pago, Pagov)
 
 class Grupov(admin.ModelAdmin):

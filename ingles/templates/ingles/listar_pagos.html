@@ -21,19 +21,24 @@ Listado de Pagos
             <th>Opciones</th>
         </thead>
         <tbody>
-            {% for pago in pagos %}
-                <tr>
-                    <td>{{ pago.foliopago }}</td> 
-                    <td>{{ pago.idmateria }}</td>
-                    <td>{{ pago.idestudiante }}</td>
-                    <td>{{ pago.idperiodo }}</td>
-                    <td>{{ pago.fechapago }}</td>
-                    <td>{{ pago.fechasist }}</td>
-                    <td> 
-                      <button onclick="abrir_modal_edicion('{% url 'ingles:editar_pago' pago.foliopago %}')" class="btn btn-outline-secondary">Editar</button>
-                      <a href="{% url 'ingles:eliminar_pago' pago.foliopago %}" class="btn btn-outline-danger">Eliminar</a>
-                    </td>
-                </tr>
+          {% for pago in pagos %}
+          <tr>
+              {% if pago.idestado.estado == 'Pendiente' %}
+                <td>{{ pago.foliopago }}</td> 
+                <td>{{ pago.idmateria }}</td>
+                <td>{{ pago.idestudiante }}</td>
+                <td>{{ pago.idperiodo }}</td>
+                <td>{{ pago.fechapago }}</td>
+                <td>{{ pago.fechasist }}</td>
+                <td> 
+                  <button onclick="abrir_modal_edicion('{% url 'ingles:editar_pago' pago.foliopago %}')" class="btn btn-outline-secondary">Editar</button>
+                  {% if request.user.is_superuser %}
+                  <a href="{% url 'ingles:eliminar_pago' pago.foliopago %}" class="btn btn-outline-danger">Eliminar</a>
+                  {% endif %}
+                </td> 
+                <!-- http://127.0.0.1:8000/media/{% pago.pagocurso %} -->
+                {% endif %}
+            </tr>
                 {% endfor %}    
         </tbody>
     </table>
