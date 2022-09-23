@@ -1,3 +1,4 @@
+from multiprocessing import get_context
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
@@ -10,7 +11,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import authenticate , login, logout
 from usuario.mixins import SuperUsuarioMixin
 
-# Create your views here.
+# Create your views here.   
+# <td> <button href="{% url 'http://127.0.0.1:8000/media/' pago.pagocurso %}"  class="btn btn-outline-primary">ver</button></td>
 def home(request):  
     if request.user.is_authenticated:
         estudiante = Estudiante.objects.get(usuario = request.user)
@@ -61,6 +63,12 @@ class PerfilListadoEstudiante(LoginRequiredMixin,View):
     
     def get(self, request, *args, **kwargs):    
         return render(request, self.template_name, self.get_context_data())
+    
+    # def home(request):  
+    #     if request.user.is_authenticated:
+    #         estudiante = Estudiante.objects.get(usuario = request.user)
+    #         return render(request, 'ingles/crear_pago.html', {'estudiante': estudiante} )
+    #     return render(request, 'ingles/crear_pago.html')
 
 class PerfilActualizarEstudiante(LoginRequiredMixin, UpdateView):
     model = Estudiante
@@ -120,7 +128,7 @@ class EliminarEstudiante(LoginRequiredMixin, SuperUsuarioMixin, DeleteView):
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
     
 """ CRUD GRUPO """
-class ListadoGrupo(LoginRequiredMixin, SuperUsuarioMixin, View):
+class ListadoGrupo(LoginRequiredMixin, View):
     model = Grupo
     form_class = GruposForm
     template_name = 'ingles/listar_grupos.html'
@@ -165,7 +173,7 @@ class EliminarGrupo(LoginRequiredMixin, SuperUsuarioMixin, DeleteView):
 
 """ CRUD DET_GRUPO """
 
-class ListadoGrupoDetalle(LoginRequiredMixin, SuperUsuarioMixin, ListView):
+class ListadoGrupoDetalle(LoginRequiredMixin, ListView):
     model = Det_Grupo
     template_name = 'ingles/listar_gruposdetalle.html'
     context_object_name = 'gruposdetalles'
@@ -176,11 +184,22 @@ class ActualizarGrupoDetalle(LoginRequiredMixin, SuperUsuarioMixin, UpdateView):
     form_class = GruposDetalleForm
     success_url = reverse_lazy('curso:listar_grupos')
 
-class CrearGrupoDetalle(LoginRequiredMixin, SuperUsuarioMixin, CreateView):
+class CrearGrupoDetalle(LoginRequiredMixin, CreateView):
     model = Det_Grupo
     template_name = 'ingles/crear_gruposdetalle.html'
     form_class = GruposDetalleForm
     success_url = reverse_lazy('curso:listar_grupos')
+
+    def form_valid(self, form):
+        # id = self.kwargs['idgrupo']
+        self.object = form.save(commit=False)
+        # self.object.idperiodo = Grupo.objects.get(usuario = se )
+        self.object.idgrupo = Grupo.objects.get(idgrupo = id)
+        self.object.idestudiante = Estudiante.objects.get(usuario = self.request.user) 
+        # self.object.idpago = Estudiante.objects.get(usuario = self.request.user) 
+        #self.object.idestudiante = self.request.Estudiante  
+        self.object.save()
+        return super(CrearGrupoDetalle, self).form_valid(form)
 
 class EliminarGrupoDetalle(LoginRequiredMixin, SuperUsuarioMixin, DeleteView):
     model = Det_Grupo
@@ -258,7 +277,7 @@ class ListadoPagoE(LoginRequiredMixin, View):
     template_name = 'ingles/listar_pagos.html'
     
     def get_queryset(self):
-        return self.model.objects.filter(usuario =self.request.user.username )
+        return self.model.objects.filter(usuario =self.request.user.username).order_by('-idmateria')
     
     def get_context_data(self, **kwargs):
         contexto = {}
@@ -267,6 +286,7 @@ class ListadoPagoE(LoginRequiredMixin, View):
     
     def get(self, request, *args, **kwargs):    
         return render(request, self.template_name, self.get_context_data())
+    
 
 class ActualizarPago(LoginRequiredMixin, UpdateView):
     model = Pago
@@ -287,11 +307,13 @@ class CrearPago(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['pagos']=Pago.objects.filter(estado = True)  
+        context['pagos']=Pago.objects.filter(estado = True)
+        context['estudiante']= Estudiante.objects.get(usuario = self.request.user)  
         return context
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
+        self.object.idestudiante = Estudiante.objects.get(usuario = self.request.user) 
         self.object.usuario = self.request.user.username
         #self.object.idestudiante = self.request.Estudiante  
         self.object.save()

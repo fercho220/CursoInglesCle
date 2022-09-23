@@ -5,16 +5,17 @@ Detalle de Grupos
 {% endblock titulo %}
 
 {% block body %}
+<h3> {{ estudiante.nombre | upper }} {{ estudiante.apellidop | upper }} {{ estudiante.apellidom  | upper }}</h3>
 <div>
-    <button class="btn btn-outline-primary" type="button" onclick="abrir_modal_creacion('{% url 'curso:crear_gruposdetalles' %}')">Agregar un Estudiante</button>
+    <button class="btn btn-outline-primary" type="button" onclick="abrir_modal_creacion('{% url 'curso:crear_gruposdetalles' %}')">Agregar</button>
   </div>
 {% if gruposdetalles %}
     <table class="table table-striped table-bordered">
         <thead class="thead-info">
             <th>Estudiante</th>
-            <th>Folio</th>
+            <!-- <th>Folio</th> -->
             <th>Calificación</th>
-            <th>Opciones</th>
+            <!-- <th>Opciones</th> -->
             {% for grupodetalle in gruposdetalles %}
 
         {%if forloop.first%}
@@ -22,14 +23,16 @@ Detalle de Grupos
           <h3 >Grupo: {{grupodetalle.idgrupo}}</h3> 
         </thead>
         <tbody>
-        {%endif%}
+          {%endif%}
                 <tr>
                     <td>{{ grupodetalle.idestudiante }}</td>
-                    <td>{{ grupodetalle.foliopago }}</td>
+                    <!-- <td>{{ grupodetalle.foliopago }}</td> -->
                     <td>{{ grupodetalle.calif }}</td>
+                    {% if request.user.is_superuser %}
                     <td> <button onclick="abrir_modal_edicion('{% url 'ingles:editar_gruposdetalles' grupodetalle.id %}')" class="btn btn-outline-secondary">Editar</button></td>
                     <td><a href="{% url 'ingles:eliminar_gruposdetalles' grupodetalle.id %}" class="btn btn-outline-danger">Eliminar</a></td>
-                </tr>
+                    {% endif %}
+                  </tr>
                 {% endfor %}
         </tbody>
         <!-- <td><a href="{% url 'ingles:crear_grupos' %}">Detalle</a></td> Page content<td><a href="{% url 'ingles:crear_grupos' %}">Agregar</a></td>-->

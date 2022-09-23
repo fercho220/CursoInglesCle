@@ -43,10 +43,9 @@ urlpatterns = [
     path('editar_pago<int:pk>', ActualizarPago.as_view() , name = 'editar_pago'),
     path('eliminar_pago/<int:pk>',EliminarPago.as_view(), name = 'eliminar_pago'),
 
-    #""" URL PERIODO """
+    #""" URL PERIODO """z
     path('crear_periodo/', CrearPeriodo.as_view() , name = 'crear_periodo'),
     path('listar_periodo/', ListadoPeriodo.as_view(), name = 'listar_periodo'),
     path('editar_periodo<int:pk>', ActualizarPeriodo.as_view() , name = 'editar_periodo'),
     path('eliminar_periodo/<int:pk>',EliminarPeriodo.as_view(), name = 'eliminar_periodo'),
-   
 ]   

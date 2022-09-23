@@ -109,7 +109,7 @@ class GruposForm(forms.ModelForm):
 class GruposDetalleForm(forms.ModelForm):
     class Meta:
         model = Det_Grupo
-        fields = ['idperiodo', 'idgrupo', 'idestudiante', 'foliopago', 'calif']
+        fields = ['idperiodo', 'idgrupo']
         labels = {
             'idperiodo': 'Periodo',
             'idgrupo': 'Grupo ',
@@ -187,16 +187,15 @@ class DateInput(forms.DateInput):
 class PagoForm(forms.ModelForm):
     class Meta:
         model = Pago
-        fields = ['foliopago', 'idmateria', 'idestudiante', 'idperiodo', 'fechapago', 'pagocurso', 'pagomaterial', 'monto']
+        fields = ['foliopago', 'idmateria',  'idperiodo', 'fechapago', 'pagocurso', 'monto']
         labels = {
             'foliopago': 'Folio del Estudiante',
             'idmateria': 'Materia del Estudiante ',
-            'idestudiante': 'Estudiante',
+            # 'idestudiante': 'Estudiante',
             'idperiodo': 'Periodo',
             'fechapago': 'Fecha Del Pago',
             'monto': 'Monto',
             'pagocurso' : 'Vaoucher Del Pago al Curso',
-            'pagomaterial': 'Vaoucher Del Pago del Material',
         }
         widgets = { 
             'idmateria': forms.Select(
@@ -205,12 +204,13 @@ class PagoForm(forms.ModelForm):
                     'placeholder':'Ingrese la materia'
                 }
             ),
-            'idestudiante':forms.Select(
-                attrs = {
-                    'class':'form-control',
-                    'placeholder':'Ingrese el alumno'
-                }
-            ),
+            # 'idestudiante':forms.Select(
+            #     attrs = {
+            #         'class':'form-control',
+            #         'placeholder':'Ingrese el alumno',
+            #         'readonly':'readonly'
+            #     }
+            # ),
             'idperiodo': forms.Select(
                 attrs = {
                     'class':'form-control',
@@ -219,7 +219,10 @@ class PagoForm(forms.ModelForm):
             ),
             'fechapago': DateInput(),
         }
-
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     if self.instance.pk and self.instance.idestudiante:
+    #         self.fields['idestudiante'].widget.attrs.update({'disabled': true})
 class CustomUserCreationForm(UserCreationForm):
     class Meta :
         model = User

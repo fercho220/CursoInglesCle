@@ -5,10 +5,11 @@ Listado de Grupos
 {% endblock titulo %}
 
 {% block body %}
+{% if request.user.is_superuser %}
 <div>
     <button class="btn btn-outline-primary" type="button" onclick="abrir_modal_creaciong('{% url 'curso:crear_grupos' %}')">Agregar Grupo</button>
   </div>
-
+  {% endif %}
 {% if grupos %}
     <table class="table table-striped table-bordered">
         <thead class="thead-info">
@@ -33,11 +34,12 @@ Listado de Grupos
                     <td>{{ grupo.idaula }}</td>
                     <td>{{ grupo.idmodalidad }}</td>
                     <td>{{ grupo.horario }}</td>
-                    
                     <td>
                       <a href="{% url 'ingles:listar_gruposdetalles' grupo.idgrupo %}" class="btn btn-outline-info">Detalle</a>
+                      {% if request.user.is_superuser %}
                       <button onclick="abrir_modal_ediciong('{% url 'ingles:editar_grupos' grupo.idgrupo %}')" class="btn btn-outline-secondary">Editar</button>
                       <a href="{% url 'ingles:eliminar_grupos' grupo.idgrupo %}" class="btn btn-outline-danger">Eliminar</a>
+                      {% endif %}
                     </td>
                 </tr>
                 {% endfor %}

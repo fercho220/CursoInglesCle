@@ -47,10 +47,11 @@ admin.site.register(Pago, Pagov)
 
 class Grupov(admin.ModelAdmin):
     list_display=('idperiodo','idgrupo','idmateria','iddocente','idaula','idmodalidad','horario')
+    list_filter = ['idmateria', 'idperiodo', 'idmodalidad']
 admin.site.register(Grupo, Grupov)
 
 class Det_Grupov(admin.ModelAdmin):
     list_display=('idperiodo','idgrupo','idestudiante','foliopago','calif')
     #search_fields = ['idgrupo', 'idperiodo']
-    list_filter = ['idgrupo', 'idperiodo']
+    list_filter = ['idperiodo', 'idgrupo']
 admin.site.register(Det_Grupo, Det_Grupov)

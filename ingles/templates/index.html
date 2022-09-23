@@ -65,12 +65,12 @@
                           </ul>
                         </div>
 
+                        <li class="nav-item"><a class="nav-link" href="{% url 'curso:listar_grupos' %}">Grupos</a></li>
                         {% if request.user.is_superuser %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'curso:listar_estudiante' %}">Estudiantes</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'curso:listar_docente' %}">Facilitador</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'curso:listar_periodo' %}">Periodos</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'curso:listar_pago' %}">Pagos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'curso:listar_grupos' %}">Grupos</a></li>
                         {% endif %}
                         <!-- <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Cerrar Sesión</a></li> -->
                     </ul>
@@ -85,7 +85,7 @@
                 <h2>Bienvenido(a)</h2>
                 <h3>{{estudiante.nocontrol}}</h3>
                 <!-- <h3>{{ user.username | upper }}</h3>-->
-                <h3>{{ estudiante.nombre | upper }} {{ estudiante.apellidop | upper }} {{ estudiante.apellidom  | upper }}</h3>
+                <h3>{{ estudiante.idestudiante | upper }} {{ estudiante.nombre | upper }} {{ estudiante.apellidop | upper }} {{ estudiante.apellidom  | upper }}</h3>
                 <p class="lead">Revisa tu Perfil y Confirma tus Datos.</p>
             </div>
         </div>

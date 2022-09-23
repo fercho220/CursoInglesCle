@@ -6,37 +6,37 @@ Listado de Pagos
 
 {% block body %}
 <div>
-  <button class="btn btn-outline-primary" type="button" onclick="abrir_modal_creacion('{% url 'curso:crear_pago' %}')">Agregar Pago</button>
+  <button class="btn btn-outline-primary" type="button" onclick="abrir_modal_creacion('{% url 'curso:crear_pago'%}')">Agregar Pago</button>
 </div>
 {% if pagos %}
 <div class="table-stats order-table ov-h">
-    <table class="table table-striped table-bordered">
-        <thead class="thead-info"> 
-            <th>#</th> 
-            <th>Materia</th>
-            <th>Estudiante</th>
-            <th>Periodo</th>
-            <th>Fecha del Pago</th>
-            <th>Fecha de Alta</th>
-            <th>Opciones</th>
-        </thead>
-        <tbody>
-          {% for pago in pagos %}
-          <tr>
-              {% if pago.idestado.estado == 'Pendiente' %}
-                <td>{{ pago.foliopago }}</td> 
-                <td>{{ pago.idmateria }}</td>
-                <td>{{ pago.idestudiante }}</td>
-                <td>{{ pago.idperiodo }}</td>
-                <td>{{ pago.fechapago }}</td>
-                <td>{{ pago.fechasist }}</td>
-                <td> 
-                  <button onclick="abrir_modal_edicion('{% url 'ingles:editar_pago' pago.foliopago %}')" class="btn btn-outline-secondary">Editar</button>
-                  {% if request.user.is_superuser %}
-                  <a href="{% url 'ingles:eliminar_pago' pago.foliopago %}" class="btn btn-outline-danger">Eliminar</a>
+  <table class="table table-striped table-bordered">
+    <thead class="thead-info"> 
+      <th>#</th> 
+      <th>Materia</th>
+      <th>Estudiante</th>
+      <th>Periodo</th>
+      <th>Fecha del Pago</th>
+      <th>Fecha de Alta</th>
+      <th>Opciones</th>
+    </thead>
+    <tbody>
+      {% for pago in pagos %}
+      <tr>
+        {% if pago.idestado.estado == 'Pendiente' %}
+        <td>{{ pago.foliopago }}</td> 
+        <td>{{ pago.idmateria }}</td>
+        <td>{{ pago.idestudiante }}</td>
+        <td>{{ pago.idperiodo }}</td>
+        <td>{{ pago.fechapago }}</td>
+        <td>{{ pago.fechasist }}</td>
+        <!-- <td>{{ pago.pagocurso }}</td> -->
+        <td> 
+          <button onclick="abrir_modal_edicion('{% url 'ingles:editar_pago' pago.foliopago %}')" class="btn btn-outline-secondary">Editar</button>
+          {% if request.user.is_superuser %}
+          <a href="{% url 'ingles:eliminar_pago' pago.foliopago %}" class="btn btn-outline-danger">Eliminar</a>
                   {% endif %}
                 </td> 
-                <!-- http://127.0.0.1:8000/media/{% pago.pagocurso %} -->
                 {% endif %}
             </tr>
                 {% endfor %}    
