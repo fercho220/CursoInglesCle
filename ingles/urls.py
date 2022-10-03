@@ -28,6 +28,7 @@ urlpatterns = [
     path('editar_gruposdetalles/<int:pk>', ActualizarGrupoDetalle.as_view() , name = 'editar_gruposdetalles'),
     path('listar_gruposdetalles/<int:id>', login_required(listaDetalle), name = 'listar_gruposdetalles'),
     path('crear_gruposdetalles/', CrearGrupoDetalle.as_view() , name = 'crear_gruposdetalles'),
+    path('crear_gruposdetallesA/', CrearGrupoDetalleAdm.as_view() , name = 'crear_gruposdetallesadm'),
     path('eliminar_gruposdetalles/<int:pk>', EliminarGrupoDetalle.as_view() , name = 'eliminar_gruposdetalles'),
     
     #""" URL DOCENTE """

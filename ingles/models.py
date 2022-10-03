@@ -43,8 +43,8 @@ class Docente(models.Model):
     estado = models.BooleanField(default = True, verbose_name = 'Estado')
 
     class Meta:
-        verbose_name = 'Docente'
-        verbose_name_plural = 'Docentes'
+        verbose_name = 'Facilitador'
+        verbose_name_plural = 'Facilitadores'
 
     def __str__(self):
         return "%s %s %s" % (self.nombre, self.apellidop, self.apellidom)
@@ -55,8 +55,8 @@ class Materia(models.Model):
     # nivel = models.IntegerField(db_column='Nivel', blank=True, null=True)  # Field name made lowercase.
     
     class Meta:
-        verbose_name = 'Materia'
-        verbose_name_plural = 'Materias'
+        verbose_name = 'Cuso'
+        verbose_name_plural = 'Cursos'
 
     def __str__(self):
         return "%s " % (self.nombremateria)
@@ -92,7 +92,7 @@ class Estudiante(models.Model):
     idestudiante = models.AutoField(db_column='IdEstudiante', primary_key=True)  # Field name made lowercase.
     nombre = models.CharField(db_column='Nombre', max_length=25, blank=True, null=True)  # Field name made lowercase.
     apellidop = models.CharField(db_column='ApellidoP', max_length=25, blank=True, null=True)  # Field name made lowercase.
-    apellidom = models.CharField(db_column='ApellidoM', max_length=25, blank=True, null=True)  # Field name made lowercase.
+    apellidom = models.CharField(db_column='ApellidoM', max_length=25, blank=True, null=True, default= " ")  # Field name made lowercase.
     nocontrol = models.IntegerField(db_column='NoControl', blank=True, null=True)  # Field name made lowercase.
     idcarrera = models.ForeignKey(Carrera, on_delete=models.CASCADE, db_column='IdCarrera', blank=True, null=True)  # Field name made lowercase.
     email = models.EmailField(db_column='Correo Electrónico', max_length=254, unique = True, blank=True, null=True)
@@ -105,34 +105,11 @@ class Estudiante(models.Model):
         verbose_name_plural = 'Estudiantes'
 
     def __str__(self):
-        return "%s %s %s %s %s " % (self.nombre, self.apellidop, self.apellidom, self.nocontrol, self.idcarrera)
-
-class Pago(models.Model):
-    #idperiodo = models.ForeignKey(Periodo, on_delete=models.CASCADE, db_column='IdPeriodo')  # Field name made lowercase.
-    #idperiodo = models.ForeignKey(Periodo, models.DO_NOTHING, db_column='IdPeriodo', blank=True, null=True)  # Field name made lowercase.
-    foliopago = models.AutoField(db_column='FolioPago', primary_key=True)  # Field name made lowercase.
-    idmateria = models.ForeignKey(Materia, on_delete=models.CASCADE, db_column='IdMateria', blank=True, null=True)  # Field name made lowercase.
-    idestudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE, db_column='IdEstudiante', blank=True, null=True)  # Field name made lowercase.
-    idperiodo = models.ForeignKey(Periodo, on_delete=models.CASCADE, db_column='IdPeriodo', blank=True, null=True)  # Field name made lowercase.
-    fechapago = models.DateField(db_column='FechaPago', blank=False, null=True)  # Field name made lowercase.
-    #fechasist = models.DateField(db_column='FechaSist', blank=True, null=True)  # Field name made lowercase.
-    fechasist = models.DateTimeField(db_column='FechaSist', auto_now_add=True)
-    idestado = models.ForeignKey(Estado, on_delete=models.CASCADE,db_column='idestado',default = 1, blank=True, null=True)  # Field name made lowercase.
-    pagocurso = models.FileField(upload_to=user_directory_path, blank=True, null=True)
-    pagomaterial = models.FileField(upload_to=user_directory_path, blank=True, null=True)
-    monto = models.DecimalField(db_column='Monto', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
-    usuario =  models.CharField(blank=True, db_column='Usuario', max_length=25, null=True)  # Field name made lowercase.
-    # usuario =models.OneToOneField(User, on_delete=models.CASCADE, db_column='Usuario', default=19)
-    estado = models.BooleanField(default = True, verbose_name = 'Estado')
-    class Meta:
-        verbose_name = 'Pago'
-        verbose_name_plural = 'Pagos'
-    def __str__(self):
-        return "%s " % (self.idestudiante)
+        return "%s %s %s %s " % (self.nombre, self.apellidop, self.apellidom, self.nocontrol)
 
 class Grupo(models.Model):
-    idperiodo = models.ForeignKey(Periodo, on_delete=models.CASCADE, db_column='IdPeriodo')  # Field name made lowercase.
     idgrupo = models.AutoField(db_column='IdGrupo', primary_key=True)  # Field name made lowercase.
+    idperiodo = models.ForeignKey(Periodo, on_delete=models.CASCADE, db_column='IdPeriodo')  # Field name made lowercase.
     idmateria = models.ForeignKey(Materia, on_delete=models.CASCADE, db_column='IdMateria', blank=True, null=True)  # Field name made lowercase.
     iddocente = models.ForeignKey(Docente, on_delete=models.CASCADE, db_column='IdDocente', blank=True, null=True)  # Field name made lowercase.
     idaula = models.ForeignKey(Aula, on_delete=models.CASCADE, db_column='IdAula', blank=True, null=True)  # Field name made lowercase.
@@ -146,17 +123,36 @@ class Grupo(models.Model):
     def __str__(self):
         return " %s %s %s %s %s" % ( self.idmateria, self.iddocente, self.idaula,self.idmodalidad, self.horario)
 
+class Pago(models.Model):
+    foliopago = models.AutoField(db_column='FolioPago', primary_key=True)  # Field name made lowercase.
+    idmateria = models.ForeignKey(Materia, on_delete=models.CASCADE, db_column='IdMateria', blank=True, null=True)  # Field name made lowercase.
+    idestudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE, db_column='IdEstudiante', blank=True, null=True)  # Field name made lowercase.
+    idperiodo = models.ForeignKey(Periodo, on_delete=models.CASCADE, db_column='IdPeriodo', blank=True, null=True)  # Field name made lowercase.
+    idgrupo = models.ForeignKey(Grupo, on_delete=models.CASCADE, db_column='IdGrupo', blank=True, null=True)  # Field name made lowercase.
+    fechapago = models.DateField(db_column='FechaPago', blank=False, null=True)  # Field name made lowercase.
+    #fechasist = models.DateField(db_column='FechaSist', blank=True, null=True)  # Field name made lowercase.
+    fechasist = models.DateTimeField(db_column='FechaSist', auto_now_add=True)
+    idestado = models.ForeignKey(Estado, on_delete=models.CASCADE,db_column='idestado',default = 1, blank=True, null=True)  # Field name made lowercase.
+    pagocurso = models.FileField(upload_to=user_directory_path, blank=True, null=True)
+    # pagomaterial = models.FileField(upload_to=user_directory_path, blank=True, null=True)
+    monto = models.DecimalField(db_column='Monto', max_digits=10, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
+    usuario =  models.CharField(blank=True, db_column='Usuario', max_length=25, null=True)  # Field name made lowercase.
+    # usuario =models.OneToOneField(User, on_delete=models.CASCADE, db_column='Usuario', default=19)
+    estado = models.BooleanField(default = True, verbose_name = 'Estado')
+    class Meta:
+        verbose_name = 'Pago'
+        verbose_name_plural = 'Pagos'
+    def __str__(self):
+        return "%s " % (self.idestudiante)
+
 
 class Det_Grupo(models.Model): 
-    #idperiodo = models.OneToOneField('Periodo', on_delete=models.CASCADE, db_column='IdPeriodo', primary_key=True)  # Field name made lowercase.
     idperiodo = models.ForeignKey(Periodo, on_delete=models.CASCADE, db_column='IdPeriodo', blank=True, null=True)
-    idgrupo = models.ForeignKey('Grupo', on_delete=models.CASCADE, db_column='IdGrupo', blank=True, null=True)  # Field name made lowercase.
-    #idestudiante = models.IntegerField(db_column='IdEstudiante')  # Field name made lowercase.
-    idestudiante = models.ForeignKey('Estudiante', on_delete=models.CASCADE, db_column='IdEstudiante', blank=True, null=True    )  # Field name made lowercase.
-    foliopago = models.ForeignKey('pago', on_delete=models.CASCADE, db_column='FolioPago', blank=True, null=True)  # Field name made lowercase.
-    calif = models.IntegerField(db_column='Calif', blank=True, null=True)  # Field name made lowercase.
+    idgrupo = models.ForeignKey( Grupo, on_delete=models.CASCADE, db_column='IdGrupo', blank=True, null=True)
+    idestudiante = models.ForeignKey(Estudiante , on_delete=models.CASCADE, db_column='IdEstudiante', blank=True, null=True)
+    foliopago = models.ForeignKey(Pago,on_delete=models. SET_NULL, db_column='FolioPago', blank=True, null=True)
+    calif = models.CharField(db_column='Calif', max_length=25, blank=True, null=True)
     
-
     class Meta:
         verbose_name = 'Detalle_Grupo'
         verbose_name_plural = 'Detalles_Grupos'

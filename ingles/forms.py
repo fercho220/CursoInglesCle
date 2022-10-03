@@ -109,7 +109,7 @@ class GruposForm(forms.ModelForm):
 class GruposDetalleForm(forms.ModelForm):
     class Meta:
         model = Det_Grupo
-        fields = ['idperiodo', 'idgrupo']
+        fields = []
         labels = {
             'idperiodo': 'Periodo',
             'idgrupo': 'Grupo ',
@@ -117,6 +117,53 @@ class GruposDetalleForm(forms.ModelForm):
             'foliopago': 'Folio',
             'calif': 'Calificacion',
         }
+        # idgrupo = forms.(queryset=Grupo.objects.filter())
+        widgets = {
+            'idperiodo': forms.Select(
+                attrs = {
+                    'class':'form-control',
+                    'placeholder':'Ingrese el Periodo',
+
+                }
+            ),
+            'idgrupo': forms.Select(
+                attrs = {
+                    'class':'form-control',
+                    'placeholder':'Ingrese el Grupo'
+                }
+            ),
+            'idestudiante':forms.Select(
+                attrs = {
+                    'class':'form-control',
+                    'placeholder':'Ingrese el Estudiante'
+                }
+            ),
+            'foliopago': forms.Select(
+                attrs = {
+                    'class':'form-control',
+                    'placeholder': 'Ingrese el Folio del Alumno'
+                }
+            ),
+            'calif': forms.TextInput(
+                attrs = {
+                    'class':'form-control',
+                    'placeholder': 'Ingresa la Calificacion'
+                }
+            )
+        }
+
+class GruposDetalleAdmForm(forms.ModelForm):
+    class Meta:
+        model = Det_Grupo
+        fields = ['idperiodo','idgrupo','idestudiante','foliopago','calif']
+        labels = {
+            'idperiodo': 'Periodo',
+            'idgrupo': 'Grupo ',
+            'idestudiante': 'Estudiante',
+            'foliopago': 'Folio',
+            'calif': 'Calificacion',
+        }
+        # idgrupo = forms.(queryset=Grupo.objects.filter())
         widgets = {
             'idperiodo': forms.Select(
                 attrs = {
@@ -187,12 +234,12 @@ class DateInput(forms.DateInput):
 class PagoForm(forms.ModelForm):
     class Meta:
         model = Pago
-        fields = ['foliopago', 'idmateria',  'idperiodo', 'fechapago', 'pagocurso', 'monto']
+        fields = ['idperiodo', 'idmateria','idgrupo', 'fechapago', 'pagocurso', 'monto']
         labels = {
             'foliopago': 'Folio del Estudiante',
+            'idperiodo': 'Periodo',
             'idmateria': 'Materia del Estudiante ',
             # 'idestudiante': 'Estudiante',
-            'idperiodo': 'Periodo',
             'fechapago': 'Fecha Del Pago',
             'monto': 'Monto',
             'pagocurso' : 'Vaoucher Del Pago al Curso',
@@ -215,6 +262,12 @@ class PagoForm(forms.ModelForm):
                 attrs = {
                     'class':'form-control',
                     'placeholder': 'Ingrese el periodo'
+                }
+            ),
+            'idgrupo': forms.Select(
+                attrs = {
+                    'class':'form-control',
+                    'placeholder':'Ingrese el Grupo'
                 }
             ),
             'fechapago': DateInput(),

@@ -1,8 +1,10 @@
+from lzma import FORMAT_ALONE
 from multiprocessing import get_context
+import re
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
-from .forms import DocenteForm, EstudianteForm, GruposForm, GruposDetalleForm, PagoForm,PeriodoForm, CustomUserCreationForm
+from .forms import *
 from .models import *
 from django.views.generic import View,TemplateView, ListView, UpdateView, CreateView, DeleteView
 from django.urls import reverse, reverse_lazy
@@ -190,16 +192,17 @@ class CrearGrupoDetalle(LoginRequiredMixin, CreateView):
     form_class = GruposDetalleForm
     success_url = reverse_lazy('curso:listar_grupos')
 
-    def form_valid(self, form):
-        # id = self.kwargs['idgrupo']
-        self.object = form.save(commit=False)
-        # self.object.idperiodo = Grupo.objects.get(usuario = se )
-        self.object.idgrupo = Grupo.objects.get(idgrupo = id)
-        self.object.idestudiante = Estudiante.objects.get(usuario = self.request.user) 
-        # self.object.idpago = Estudiante.objects.get(usuario = self.request.user) 
-        #self.object.idestudiante = self.request.Estudiante  
-        self.object.save()
-        return super(CrearGrupoDetalle, self).form_valid(form)
+    # def form_valid(self, form):
+    #     self.object = form.save(commit=False)
+    #     self.object.idestudiante = Estudiante.objects.get(usuario = self.request.user)  
+    #     self.object.save()
+    #     return super(CrearGrupoDetalle, self).form_valid(form)
+
+class CrearGrupoDetalleAdm(LoginRequiredMixin, CreateView):
+    model = Det_Grupo
+    template_name = 'ingles/crear_gruposdetalle.html'
+    form_class = GruposDetalleAdmForm
+    success_url = reverse_lazy('curso:listar_grupos')
 
 class EliminarGrupoDetalle(LoginRequiredMixin, SuperUsuarioMixin, DeleteView):
     model = Det_Grupo
@@ -303,21 +306,48 @@ class CrearPago(LoginRequiredMixin, CreateView):
     model = Pago
     template_name = 'ingles/crear_pago.html'
     form_class = PagoForm
+    second_form_class = GruposDetalleForm
     success_url = reverse_lazy('curso:listar_pago')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['pagos']=Pago.objects.filter(estado = True)
         context['estudiante']= Estudiante.objects.get(usuario = self.request.user)  
+        if 'form' != context:
+            context['form'] = self.form_class(self.request.GET)
+        if 'form2' != context:
+            context ['form2'] = self.second_form_class(self.request.GET)
         return context
 
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.idestudiante = Estudiante.objects.get(usuario = self.request.user) 
-        self.object.usuario = self.request.user.username
-        #self.object.idestudiante = self.request.Estudiante  
-        self.object.save()
-        return super(CrearPago, self).form_valid(form)
+    def post (self, request, *arg, **kwargs):
+        self.object = self.get_object
+        form = self.form_class(request.POST)
+        form2 = self.second_form_class(request.POST)
+        if form.is_valid() and form2.is_valid():
+            pago = form.save(commit = False)
+            grup = form2.save(commit = False)
+            pago.idestudiante = Estudiante.objects.get(usuario = self.request.user) 
+            grup.idestudiante = pago.idestudiante
+            pago.usuario = self.request.user.username
+            grup.calif = ""
+            grup.idperiodo = pago.idperiodo
+            grup.idgrupo = pago.idgrupo
+            pago.save()
+            print(pago.foliopago)
+            grup.foliopago = Pago.objects.get(foliopago = pago.foliopago) 
+            print(grup.foliopago)
+            grup.save()
+            return HttpResponseRedirect(self.get_success_url())
+        else:
+            return self.render_to_response(self.get_context_data(form = form, form2 = form2))
+
+    # def form_valid(self, form):
+    #     self.object = form.save(commit=False)
+    #     self.object.idestudiante = Estudiante.objects.get(usuario = self.request.user) 
+    #     self.object.usuario = self.request.user.username
+    #     #self.object.idestudiante = self.request.Estudiante  esta linea no
+    #     self.object.save()
+    #     return super(CrearPago, self).form_valid(form)
     
     # def get_form(self, form_class = None):
     #     form = super().get_form(form_class)

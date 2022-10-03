@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'import_export',
     'crispy_forms',
     'rest_framework',
-    #'django_filters',
+    # 'django_filters',
     #'bootstrapform',
 ]
 

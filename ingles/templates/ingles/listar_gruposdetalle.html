@@ -6,14 +6,16 @@ Detalle de Grupos
 
 {% block body %}
 <h3> {{ estudiante.nombre | upper }} {{ estudiante.apellidop | upper }} {{ estudiante.apellidom  | upper }}</h3>
+{% if request.user.is_superuser %}
 <div>
-    <button class="btn btn-outline-primary" type="button" onclick="abrir_modal_creacion('{% url 'curso:crear_gruposdetalles' %}')">Agregar</button>
+    <button class="btn btn-outline-primary" type="button" onclick="abrir_modal_creacion('{% url 'curso:crear_gruposdetallesadm' %}')">Agregar</button>
   </div>
+  {% endif %}
 {% if gruposdetalles %}
     <table class="table table-striped table-bordered">
         <thead class="thead-info">
             <th>Estudiante</th>
-            <!-- <th>Folio</th> -->
+            <th>Folio</th>
             <th>Calificación</th>
             <!-- <th>Opciones</th> -->
             {% for grupodetalle in gruposdetalles %}
@@ -26,6 +28,7 @@ Detalle de Grupos
           {%endif%}
                 <tr>
                     <td>{{ grupodetalle.idestudiante }}</td>
+                    <td>{{ grupodetalle.foliopago }}</td>
                     <!-- <td>{{ grupodetalle.foliopago }}</td> -->
                     <td>{{ grupodetalle.calif }}</td>
                     {% if request.user.is_superuser %}

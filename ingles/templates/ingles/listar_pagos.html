@@ -23,21 +23,18 @@ Listado de Pagos
     <tbody>
       {% for pago in pagos %}
       <tr>
-        {% if pago.idestado.estado == 'Pendiente' %}
         <td>{{ pago.foliopago }}</td> 
         <td>{{ pago.idmateria }}</td>
         <td>{{ pago.idestudiante }}</td>
         <td>{{ pago.idperiodo }}</td>
         <td>{{ pago.fechapago }}</td>
         <td>{{ pago.fechasist }}</td>
-        <!-- <td>{{ pago.pagocurso }}</td> -->
         <td> 
           <button onclick="abrir_modal_edicion('{% url 'ingles:editar_pago' pago.foliopago %}')" class="btn btn-outline-secondary">Editar</button>
           {% if request.user.is_superuser %}
           <a href="{% url 'ingles:eliminar_pago' pago.foliopago %}" class="btn btn-outline-danger">Eliminar</a>
                   {% endif %}
                 </td> 
-                {% endif %}
             </tr>
                 {% endfor %}    
         </tbody>
