@@ -183,7 +183,7 @@ class ListadoGrupoDetalle(LoginRequiredMixin, ListView):
 class ActualizarGrupoDetalle(LoginRequiredMixin, SuperUsuarioMixin, UpdateView):
     model = Det_Grupo
     template_name = 'ingles/grupodetalle.html'
-    form_class = GruposDetalleForm
+    form_class = GruposDetalleAdmForm
     success_url = reverse_lazy('curso:listar_grupos')
 
 class CrearGrupoDetalle(LoginRequiredMixin, CreateView):
@@ -341,19 +341,12 @@ class CrearPago(LoginRequiredMixin, CreateView):
         else:
             return self.render_to_response(self.get_context_data(form = form, form2 = form2))
 
-    # def form_valid(self, form):
-    #     self.object = form.save(commit=False)
-    #     self.object.idestudiante = Estudiante.objects.get(usuario = self.request.user) 
-    #     self.object.usuario = self.request.user.username
-    #     #self.object.idestudiante = self.request.Estudiante  esta linea no
-    #     self.object.save()
-    #     return super(CrearPago, self).form_valid(form)
-    
-    # def get_form(self, form_class = None):
-    #     form = super().get_form(form_class)
-    #     form.fields['idestudiante'].disabled = True # Desabilitamos el campo status
-    #     form.fields['idestudiante'].choices = [('r', 'Reservado')] # Le damos solo una opcion al campo status
-    #     return form
+# AJAX
+def load_cities(request):
+    idmateria = request.GET.get('idmateria')
+    grupos = Grupo.objects.filter(idmateria=idmateria)
+    return render(request,'ingles/city_dropdown_list_options.html', {'grupos': grupos})
+    # return JsonResponse(list(cities.values('id', 'name')), safe=False)
 
 class EliminarPago(LoginRequiredMixin, SuperUsuarioMixin, DeleteView):
     model = Pago

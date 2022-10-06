@@ -43,6 +43,7 @@ urlpatterns = [
     path('listar_pagoE/', ListadoPagoE.as_view(), name = 'listar_pagoE'),
     path('editar_pago<int:pk>', ActualizarPago.as_view() , name = 'editar_pago'),
     path('eliminar_pago/<int:pk>',EliminarPago.as_view(), name = 'eliminar_pago'),
+    path('ajax/load-cities/', login_required(load_cities), name='ajax_load_cities'), # AJAX
 
     #""" URL PERIODO """z
     path('crear_periodo/', CrearPeriodo.as_view() , name = 'crear_periodo'),

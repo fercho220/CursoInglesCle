@@ -27,6 +27,7 @@ Detalle de Grupos
         <tbody>
           {%endif%}
                 <tr>
+                  {% if grupodetalle.foliopago.idestado.estado == 'Aceptado' %}
                     <td>{{ grupodetalle.idestudiante }}</td>
                     <td>{{ grupodetalle.foliopago }}</td>
                     <!-- <td>{{ grupodetalle.foliopago }}</td> -->
@@ -35,8 +36,9 @@ Detalle de Grupos
                     <td> <button onclick="abrir_modal_edicion('{% url 'ingles:editar_gruposdetalles' grupodetalle.id %}')" class="btn btn-outline-secondary">Editar</button></td>
                     <td><a href="{% url 'ingles:eliminar_gruposdetalles' grupodetalle.id %}" class="btn btn-outline-danger">Eliminar</a></td>
                     {% endif %}
+                  {% endif %}
                   </tr>
-                {% endfor %}
+        {% endfor %}
         </tbody>
         <!-- <td><a href="{% url 'ingles:crear_grupos' %}">Detalle</a></td> Page content<td><a href="{% url 'ingles:crear_grupos' %}">Agregar</a></td>-->
     </table>

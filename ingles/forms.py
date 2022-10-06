@@ -238,7 +238,8 @@ class PagoForm(forms.ModelForm):
         labels = {
             'foliopago': 'Folio del Estudiante',
             'idperiodo': 'Periodo',
-            'idmateria': 'Materia del Estudiante ',
+            'idmateria': 'Curso del Estudiante ',
+            'idgrupo': 'Grupo',
             # 'idestudiante': 'Estudiante',
             'fechapago': 'Fecha Del Pago',
             'monto': 'Monto',
@@ -248,7 +249,6 @@ class PagoForm(forms.ModelForm):
             'idmateria': forms.Select(
                 attrs = {
                     'class':'form-control',
-                    'placeholder':'Ingrese la materia'
                 }
             ),
             # 'idestudiante':forms.Select(
@@ -272,6 +272,20 @@ class PagoForm(forms.ModelForm):
             ),
             'fechapago': DateInput(),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['idgrupo'].queryset = Grupo.objects.none()
+
+        if 'idmateria' in self.data:
+            try:
+                idmateria = int(self.data.get('idmateria'))
+                self.fields['idgrupo'].queryset = Grupo.objects.filter(idmateria = idmateria)
+            except (ValueError, TypeError):
+                pass
+        elif self.instance.pk:
+            self.fields['idgrupo'].queryset = self.intance.idmateria.idgrupo_set
+                
     # def __init__(self, *args, **kwargs):
     #     super().__init__(*args, **kwargs)
     #     if self.instance.pk and self.instance.idestudiante:

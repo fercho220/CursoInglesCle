@@ -105,7 +105,7 @@ class Estudiante(models.Model):
         verbose_name_plural = 'Estudiantes'
 
     def __str__(self):
-        return "%s %s %s %s " % (self.nombre, self.apellidop, self.apellidom, self.nocontrol)
+        return "%s %s %s " % (self.nombre, self.apellidop, self.apellidom)
 
 class Grupo(models.Model):
     idgrupo = models.AutoField(db_column='IdGrupo', primary_key=True)  # Field name made lowercase.
@@ -143,14 +143,14 @@ class Pago(models.Model):
         verbose_name = 'Pago'
         verbose_name_plural = 'Pagos'
     def __str__(self):
-        return "%s " % (self.idestudiante)
+        return "%s %s %s" % (self.idmateria,self.idperiodo,self.idestudiante)
 
 
 class Det_Grupo(models.Model): 
     idperiodo = models.ForeignKey(Periodo, on_delete=models.CASCADE, db_column='IdPeriodo', blank=True, null=True)
     idgrupo = models.ForeignKey( Grupo, on_delete=models.CASCADE, db_column='IdGrupo', blank=True, null=True)
     idestudiante = models.ForeignKey(Estudiante , on_delete=models.CASCADE, db_column='IdEstudiante', blank=True, null=True)
-    foliopago = models.ForeignKey(Pago,on_delete=models. SET_NULL, db_column='FolioPago', blank=True, null=True)
+    foliopago = models.ForeignKey(Pago, on_delete=models.CASCADE, db_column='FolioPago', blank=True, null=True)
     calif = models.CharField(db_column='Calif', max_length=25, blank=True, null=True)
     
     class Meta:
