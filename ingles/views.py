@@ -290,7 +290,6 @@ class ListadoPagoE(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):    
         return render(request, self.template_name, self.get_context_data())
     
-
 class ActualizarPago(LoginRequiredMixin, UpdateView):
     model = Pago
     form_class = PagoForm
@@ -307,7 +306,7 @@ class CrearPago(LoginRequiredMixin, CreateView):
     template_name = 'ingles/crear_pago.html'
     form_class = PagoForm
     second_form_class = GruposDetalleForm
-    success_url = reverse_lazy('curso:listar_pago')
+    success_url = reverse_lazy('curso:listar_pagoE')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -332,10 +331,11 @@ class CrearPago(LoginRequiredMixin, CreateView):
             grup.calif = ""
             grup.idperiodo = pago.idperiodo
             grup.idgrupo = pago.idgrupo
+            pago.pagocurso = request.FILES['pagocurso']
+            print(pago.pagocurso)
             pago.save()
             print(pago.foliopago)
             grup.foliopago = Pago.objects.get(foliopago = pago.foliopago) 
-            print(grup.foliopago)
             grup.save()
             return HttpResponseRedirect(self.get_success_url())
         else:
@@ -356,7 +356,7 @@ class EliminarPago(LoginRequiredMixin, SuperUsuarioMixin, DeleteView):
         object = Pago.objects.get(foliopago = pk)
         object.estado = False
         object.save()
-        return redirect('curso:listar_pago')
+        return redirect('curso:listar_pagoE')
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """ CRUD PERIODO """

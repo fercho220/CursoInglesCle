@@ -284,12 +284,7 @@ class PagoForm(forms.ModelForm):
             except (ValueError, TypeError):
                 pass
         elif self.instance.pk:
-            self.fields['idgrupo'].queryset = self.intance.idmateria.idgrupo_set
-                
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     if self.instance.pk and self.instance.idestudiante:
-    #         self.fields['idestudiante'].widget.attrs.update({'disabled': true})
+            self.fields['idgrupo'].queryset = self.intance.idmateria.idgrupo_set            
 class CustomUserCreationForm(UserCreationForm):
     class Meta :
         model = User

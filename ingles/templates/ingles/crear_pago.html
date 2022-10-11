@@ -6,7 +6,7 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <form action="{% url 'curso:crear_pago'%}" id="pagoForm" novalidate data-cities-url="{% url 'curso:ajax_load_cities' %}" method="post" enctype= 'multipart/form-data'>
+        <form action="{% url 'curso:crear_pago'%}" id="pagoForm" data-cities-url="{% url 'curso:ajax_load_cities' %}" method="POST" enctype= 'multipart/form-data'>
             {% csrf_token %}
         <div class="modal-body">
             {{ form.as_p }}
@@ -17,11 +17,11 @@
             <button class="btn btn-outline-primary" onclick="alerta()" type="submit">Confirmar</button>
         </div>
     </form>
-    <script>
+    <!-- <script>
         function alerta(){
             alert("Se ha registrado su pago y apareceras en el grupo cuando entregues el boucher")
         }
-    </script>
+    </script> -->
     <script>
         $("#id_idmateria").change(function () {
             const url = $("#pagoForm").attr("data-cities-url");  // get the url of the `load_cities` view
