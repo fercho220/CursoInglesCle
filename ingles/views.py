@@ -21,6 +21,11 @@ def home(request):
         return render(request, 'index.html', {'estudiante': estudiante} )
     return render(request, 'index.html')
 
+def home2(request):  
+    if request.user.is_authenticated:
+        estudiante = Estudiante.objects.get(usuario = request.user)
+        return render(request, 'home/index.html', {'estudiante': estudiante} )
+    return render(request, 'home/index.html')
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 class Inicio(LoginRequiredMixin,TemplateView):
     template_name = 'index.html'
@@ -31,6 +36,14 @@ class Inicio(LoginRequiredMixin,TemplateView):
             return render(request, 'index.html', {'estudiante': estudiante} )
         return render(request, 'index.html')
 
+class Inicio2(LoginRequiredMixin,TemplateView):
+    template_name = 'home/index.html'
+    
+    def home(request):  
+        if request.user.is_authenticated:
+            estudiante = Estudiante.objects.get(usuario = request.user)
+            return render(request, 'home/index.html', {'estudiante': estudiante} )
+        return render(request, 'home/index.html')
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 def Registro(request):
     data = {
@@ -347,6 +360,11 @@ def load_cities(request):
     grupos = Grupo.objects.filter(idmateria=idmateria)
     return render(request,'ingles/city_dropdown_list_options.html', {'grupos': grupos})
     # return JsonResponse(list(cities.values('id', 'name')), safe=False)
+
+def load_cities2(request):
+    idperiodo = request.GET.get('idperiodo')
+    grupos = Grupo.objects.filter(idperiodo=idperiodo)
+    return render(request,'ingles/city_dropdown_list_options.html', {'grupos': grupos})
 
 class EliminarPago(LoginRequiredMixin, SuperUsuarioMixin, DeleteView):
     model = Pago

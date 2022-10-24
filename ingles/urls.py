@@ -7,6 +7,7 @@ from os import name
 app_name='ingles'
 urlpatterns = [
     path('',login_required(views.home),name='index'),
+    path('index2/',login_required(views.home2),name='index2'),
     path('registro/',views.Registro,name='registro'),
     
     path('perfil/', PerfilListadoEstudiante.as_view() , name = 'listar_perfil'),
