@@ -273,7 +273,7 @@ class PagoForm(forms.ModelForm):
             'fechapago': DateInput(),
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs): 
         super().__init__(*args, **kwargs)
         self.fields['idgrupo'].queryset = Grupo.objects.none()
 
