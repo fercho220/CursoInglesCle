@@ -1,7 +1,6 @@
 <div class="sidebar" data-color="purple" data-background-color="white" data-image="/static/assets/img/R.jpg">
   <div class="logo">
-    <a target="_blank" rel="noopener noreferrer" href="#"
-      class="simple-text logo-normal">
+    <a target="_blank" rel="noopener noreferrer" href="#" class="simple-text logo-normal">
       Panel de Control
     </a>
   </div>
@@ -12,35 +11,36 @@
       <li class="nav-item {% if 'index' in segment %} active {% endif %}">
         <a class="nav-link" href="/">
           <i class="material-icons">dashboard</i>
-          <p>Dashboard</p>
+          <p>Inicio</p>
         </a>
       </li>
       <li class="nav-item {% if 'page-user' in segment %} active {% endif %}">
-        <a class="nav-link" href="/page-user.html">
+        <a class="nav-link" href="{% url 'curso:listar_perfil' %}">
           <i class="material-icons">person</i>
           <p>Perfil</p>
         </a>
       </li>
       <li class="nav-item {% if 'ui-tables' in segment %} active {% endif %}">
-        <a class="nav-link" href="/ui-tables.html">
+        <a class="nav-link" href="{% url 'curso:listar_pagoE' %}">
           <i class="material-icons">content_paste</i>
           <p>Pagos</p>
         </a>
       </li>
       <li class="nav-item {% if 'ui-typography' in segment %} active {% endif %}">
-        <a class="nav-link" href="/ui-typography.html">
+        <a class="nav-link" href="{% url 'curso:listar_grupos' %}">
           <i class="material-icons">library_books</i>
           <p>Grupos</p>
         </a>
       </li>
 
-      <!-- <li class="nav-item {% if 'ui-icons' in segment %} active {% endif %}">
-            <a class="nav-link" href="/ui-icons.html">
-              <i class="material-icons">bubble_chart</i>
-              <p>Icons</p>
-            </a>
-          </li> -->
-
+      {% if request.user.is_superuser %}
+      <li class="nav-item {% if 'ui-icons' in segment %} active {% endif %}">
+        <a class="nav-link" href="#">
+          <i class="material-icons">bubble_chart</i>
+          <p>Docentes</p>
+        </a>
+      </li>
+      {% endif %}
       <!-- <li class="nav-item {% if 'ui-maps' in segment %} active {% endif %}">
             <a class="nav-link" href="/ui-maps.html">
               <i class="material-icons">location_ons</i>

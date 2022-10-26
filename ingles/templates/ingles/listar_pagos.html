@@ -9,14 +9,14 @@
 <button class="btn btn-outline-primary" type="button"
   onclick="abrir_modal_creacion('{% url 'curso:crear_pago'%}')">Agregar Pago</button>
 <div class="table-responsive">
-{% if pagos %}
-<div class="row">
-  <div class="col-md-12">
-    <div class="card">
-      <div class="card-header card-header-primary">
-        <h4 class="card-title ">Lista de Pagos</h4>
-      </div>
-      <div class="card-body">
+  {% if pagos %}
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          <h4 class="card-title ">Lista de Pagos</h4>
+        </div>
+        <div class="card-body">
           <table class="table">
             <thead class=" text-primary">
               <th>#</th>
@@ -25,7 +25,9 @@
               <th>Periodo</th>
               <th>Fecha del Pago</th>
               <th>Fecha de Alta</th>
+              {% if request.user.is_superuser %}
               <th>Opciones</th>
+              {% endif %}
             </thead>
             <tbody>
               {% for pago in pagos %}
@@ -37,9 +39,9 @@
                 <td>{{ pago.fechapago }}</td>
                 <td>{{ pago.fechasist }}</td>
                 <td>
+                  {% if request.user.is_superuser %}
                   <button onclick="abrir_modal_edicion('{% url 'ingles:editar_pago' pago.foliopago %}')"
                     class="btn btn-outline-secondary">Editar</button>
-                  {% if request.user.is_superuser %}
                   <a href="{% url 'ingles:eliminar_pago' pago.foliopago %}" class="btn btn-outline-danger">Eliminar</a>
                   {% endif %}
                 </td>

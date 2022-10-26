@@ -356,15 +356,17 @@ class CrearPago(LoginRequiredMixin, CreateView):
 
 # AJAX
 def load_cities(request):
+    idperiodo = request.GET.get('idperiodo')
     idmateria = request.GET.get('idmateria')
-    grupos = Grupo.objects.filter(idmateria=idmateria)
+    #grupos = Grupo.objects.filter(idmateria=idmateria)
+    grupos = Grupo.objects.filter(idperiodo=idperiodo).filter(idmateria=idmateria)
     return render(request,'ingles/city_dropdown_list_options.html', {'grupos': grupos})
     # return JsonResponse(list(cities.values('id', 'name')), safe=False)
 
 def load_cities2(request):
     idperiodo = request.GET.get('idperiodo')
     grupos = Grupo.objects.filter(idperiodo=idperiodo)
-    return render(request,'ingles/city_dropdown_list_options.html', {'grupos': grupos})
+    return render(request,'ingles/city_dropdown_list_options2.html', {'grupos': grupos})
 
 class EliminarPago(LoginRequiredMixin, SuperUsuarioMixin, DeleteView):
     model = Pago

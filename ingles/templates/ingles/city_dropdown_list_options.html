@@ -1,4 +1,4 @@
 <option value="">---------</option>
 {% for grupo in grupos %}
-<option value="{{ grupo.pk }}">{{ grupo.iddocente }} {{ grupo.idaula }} {{ grupo.idmodalidad }} {{ grupo.horario }}</option>
+<option value="{{ grupo.pk }}">{{ grupo.horario }} {{ grupo.idmodalidad }} {{ grupo.iddocente }} {{ grupo.idaula }}  </option>
 {% endfor %}

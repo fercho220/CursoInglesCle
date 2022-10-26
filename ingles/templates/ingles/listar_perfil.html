@@ -1,62 +1,71 @@
-{% extends 'index.html' %}
+{% extends "layouts/base.html" %}
 
-{% block titulo %}
-Perfil del Estudiante
-{% endblock titulo %}
+{% block title %} UI Tables {% endblock %}
 
-{% block body %}
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<div class="table-responsive">
 {% if estudiantes %}
-<div class="table-stats order-table ov-h" >
-    <table class="table table-striped table-bordered"  >
-        <thead class="thead-info"> 
-          <h1></h1>
-            <th>#</th> 
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header card-header-primary">
+        <h4 class="card-title ">Perfil</h4>
+      </div>
+      <div class="card-body">
+        <table class="table">
+          <thead class=" text-primary">
+            <th>#</th>
             <th>Nombre</th>
             <th>Apellido Paterno</th>
             <th>Apellido Materno</th>
-            <th>Numero de Control</th> 
+            <th>Numero de Control</th>
             <th>Carrera</th>
             <th>Correo Electronico</th>
-            <!-- <th>Pago del Curso</th>
-            <th>Pago de la Materia</th> -->
             <th>Opciones</th>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
             {% for estudiante in estudiantes %}
-                <tr>
-                    <td>{{ estudiante.idestudiante }}</td> 
-                    <td>{{ estudiante.nombre }}</td>
-                    <td>{{ estudiante.apellidop }}</td>
-                    <td>{{ estudiante.apellidom }}</td>
-                    <td>{{ estudiante.nocontrol }}</td>
-                    <td>{{ estudiante.idcarrera }}</td>
-                    <td>{{ estudiante.email }}</td>
-                    <!-- <td>{{ estudiante.pagocurso }}</td>
+            <tr>
+              <td>{{ estudiante.idestudiante }}</td>
+              <td>{{ estudiante.nombre }}</td>
+              <td>{{ estudiante.apellidop }}</td>
+              <td>{{ estudiante.apellidom }}</td>
+              <td>{{ estudiante.nocontrol }}</td>
+              <td>{{ estudiante.idcarrera }}</td>
+              <td>{{ estudiante.email }}</td>
+              <!-- <td>{{ estudiante.pagocurso }}</td>
                     <td>{{ estudiante.pagomaterial }}</td> -->
-                    <td> 
-                      <button onclick="abrir_modal_edicion('{% url 'ingles:editar_estudiante2' estudiante.idestudiante %}')" class="btn btn-outline-secondary">Actualizar</button>
-                  </td>
-                </tr>
-                {% endfor %}    
-        </tbody>
-    </table>
-    {% else %}
-    <h1>No Existe Estudiantes Registrados</h1>
+              <td>
+                <button onclick="abrir_modal_edicion('{% url 'ingles:editar_estudiante2' estudiante.idestudiante %}')"
+                  class="btn btn-outline-secondary">Actualizar</button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <h1>No Existe Estudiantes Registrados</h1>
+      </div>
+    </div>
+  </div>
 </div>
-    
+</div>
 {% endif %}
 
 <div class="modal fade" id="edicion" role="dialog">
 
 </div>
-{% endblock body %}
 {% block extrajs %}
 <script type="text/javascript">
   var $ = jQuery.noConflict();
-  function abrir_modal_edicion(url){
-    $('#edicion').load(url, function (){
+  function abrir_modal_edicion(url) {
+    $('#edicion').load(url, function () {
       $(this).modal('show');
     });
   }
 </script>
-{% endblock extrajs %}  
+{% endblock extrajs %}
+{% endblock content %}

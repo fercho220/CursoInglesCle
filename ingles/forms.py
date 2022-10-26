@@ -155,7 +155,7 @@ class GruposDetalleForm(forms.ModelForm):
 class GruposDetalleAdmForm(forms.ModelForm):
     class Meta:
         model = Det_Grupo
-        fields = ['idperiodo','idgrupo','idestudiante','foliopago','calif']
+        fields = ['idestudiante','foliopago']
         labels = {
             'idperiodo': 'Periodo',
             'idgrupo': 'Grupo ',
