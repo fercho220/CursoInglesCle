@@ -284,14 +284,33 @@ class PagoForm(forms.ModelForm):
             except (ValueError, TypeError):
                 pass
         elif self.instance.pk:
-            self.fields['idgrupo'].queryset = self.intance.idmateria.idgrupo_set            
+            self.fields['idgrupo'].queryset = self.intance.idmateria.idgrupo_set   
+        
 class CustomUserCreationForm(UserCreationForm):
     class Meta :
         model = User
         fields = ['username', "first_name", "last_name", "email", "password1", "password2"]
         labels = {
-            'last_name': 'Apelido Paterno'
+            # 'username': 'class':"bmd-label-floating",'Usuario',
+            # 'first_name': 'Nombre',
         }
+        widgets = {
+            'username':forms.TextInput(attrs = {'class':'form-control','type':'text',}),
+            'first_name':forms.TextInput(attrs = {'class':'form-control','type':'text'}),
+            'last_name':forms.TextInput(attrs = {'class':'form-control','type':'text'}),
+            'email':forms.EmailInput(attrs = {'class':'form-control','type':'email',}),
+            }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].widget.attrs['autocomplete'] = 'off'
+        self.fields['password1'].widget.attrs['class'] = 'form-control'
+        self.fields['password1'].widget.attrs['type'] = 'password'
+        self.fields['password1'].widget.attrs['autocomplete'] = 'off'
+        self.fields['password2'].widget.attrs['class'] = 'form-control'
+        self.fields['password2'].widget.attrs['type'] = 'password'
+        self.fields['password2'].widget.attrs['autocomplete'] = 'off'
+    
 
 class PeriodoForm(forms.ModelForm):
     class Meta:

@@ -7,7 +7,7 @@
             </button>
         </div>
         <form action="{% url 'curso:crear_pago'%}" id="pagoForm" data-cities-url="{% url 'curso:ajax_load_cities' %}"
-            data-cities-url2="{% url 'curso:ajax_load_cities2' %}" method="POST" enctype='multipart/form-data'>
+            method="POST" enctype='multipart/form-data'>
             {% csrf_token %}
             <div class="modal-body">
                 {{ form.as_p }}

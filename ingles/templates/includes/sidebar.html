@@ -1,7 +1,7 @@
 <div class="sidebar" data-color="purple" data-background-color="white" data-image="/static/assets/img/R.jpg">
   <div class="logo">
-    <a target="_blank" rel="noopener noreferrer" href="#" class="simple-text logo-normal">
-      Panel de Control
+    <a target="_blank" rel="noopener noreferrer"  class="simple-text logo-normal">
+      TecNM-Aca
     </a>
   </div>
   <div class="sidebar-wrapper">
@@ -35,7 +35,7 @@
 
       {% if request.user.is_superuser %}
       <li class="nav-item {% if 'ui-icons' in segment %} active {% endif %}">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="http://127.0.0.1:8000/admin/ingles/docente/">
           <i class="material-icons">bubble_chart</i>
           <p>Docentes</p>
         </a>
@@ -62,12 +62,12 @@
             </a>
           </li> -->
 
-      <!-- <li class="nav-item ">
+      <li class="nav-item ">
             <a class="nav-link" href="{% url 'logout' %}" >
               <i class="material-icons">directions_run</i>
               <p>Logout</p>
             </a>
-          </li> -->
+          </li>
 
       <!-- <li class="nav-item active-pro ">
         <a class="nav-link" target="_blank" rel="noopener noreferrer"

@@ -1,66 +1,75 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Login {% endblock %} 
+{% block title %} Login {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
 
-  <div class="row">
-    <div class="col-md-5">
-      <div class="card">
-        <div class="card-header card-header-primary">
-          <h4 class="card-title">
-            Login
-          </h4>
-        </div>
-        <div class="card-body">
+<div class="row">
+  <div class="col-md-5">
+    <div class="card">
+      <div class="card-header card-header-primary">
+        <h4 class="card-title">
+          Login
+        </h4>
+      </div>
+      <div class="card-body">
 
-          <h6 class="card-category">
-              Add your credentials
-          </h6>
-          
+        <h6 class="card-category">
+          Agrega tus Credenciales
+        </h6>
+
+        <br />
+
+        <form role="form" method="post">
+          {% csrf_token %}
+          {% if request.method == 'POST' %}
+          {% if form.error_messages %}
+          <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>Advertencia: </strong> {{ form.get_invalid_login_error }}
+          </div>
+          {% endif %}
+          {% endif %}
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="bmd-label-floating">Nombre de Usuario</label>
+                {{ form.username }}
+              </div>
+            </div>
+          </div>
+
           <br />
 
-          <form role="form" action="/">
-              
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label class="bmd-label-floating">Username</label>
-                  <input type="text" class="form-control" placeholder="Username">
-                </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="bmd-label-floating">Contraseña</label>
+                {{ form.password }}
               </div>
             </div>
+          </div>
 
-            <br />
+          <br />
 
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label class="bmd-label-floating">Password</label>
-                  <input type="password" class="form-control" placeholder="Password">
-                </div>
-              </div>
-            </div>
+          <button type="submit" name="login" class="btn btn-primary pull-left">Login</button>
+          &nbsp; &nbsp;
+          <span class="pull-right">
+            ¿No tienes una cuenta? <a href="{% url 'ingles:registro' %}" class="text-primary">Registrate</a>
+          </span>
 
-            <br />
+          <div class="clearfix"></div>
 
-            <button type="submit" name="login" class="btn btn-primary pull-left">Login</button>
-
-            &nbsp; &nbsp; 
-            <span class="pull-right">
-              Don't have an account? <a href="/register.html" class="text-primary">Create</a>
-            </span>
-
-            <div class="clearfix"></div>
-
-          </form>
-        </div>
+        </form>
       </div>
     </div>
   </div>
+</div>
 
 {% endblock content %}
 

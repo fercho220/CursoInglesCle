@@ -12,7 +12,7 @@
 =========================================================
 
  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 
@@ -28,14 +28,17 @@
     CLE - {% block title %}{% endblock %} | AppSeed
   </title>
 
-  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
+    name='viewport' />
   <!--     Fonts and icons     -->
-  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+  <link rel="stylesheet" type="text/css"
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
   <!-- CSS Files -->
   <link href="/static/assets/css/material-dashboard-django.css" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="/static/assets/demo/demo.css" rel="stylesheet" />
+  <link href="/static/css/prop.css" rel="stylesheet" />
 
   <!-- Specific Page CSS goes HERE  -->
   {% block stylesheets %}{% endblock stylesheets %}
@@ -65,22 +68,23 @@
     </div>
   </div>
 
-  {% include 'includes/fixed-plugin.html' %}
+  <!-- {% include 'includes/fixed-plugin.html' %} -->
 
   {% include 'includes/scripts.html' %}
 
   {% include 'includes/scripts-sidebar.html' %}
-  
+
   <!-- Specific Page JS goes HERE  -->
-  {% block javascripts %}  {% endblock javascripts %} 
+  {% block javascripts %} {% endblock javascripts %}
   <script type="text/javascript">
     var $ = jQuery.noConflict();
-    function abrir_modal_edicion(url){
-      $('#edicion').load(url, function (){
+    function abrir_modal_edicion(url) {
+      $('#edicion').load(url, function () {
         $(this).modal('show');
       });
     } 
   </script>
-  
+
 </body>
+
 </html>

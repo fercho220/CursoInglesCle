@@ -1,6 +1,7 @@
 from lzma import FORMAT_ALONE
 from multiprocessing import get_context
 import re
+from tkinter.tix import Tree
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
@@ -359,7 +360,7 @@ def load_cities(request):
     idperiodo = request.GET.get('idperiodo')
     idmateria = request.GET.get('idmateria')
     #grupos = Grupo.objects.filter(idmateria=idmateria)
-    grupos = Grupo.objects.filter(idperiodo=idperiodo).filter(idmateria=idmateria)
+    grupos = Grupo.objects.filter(idperiodo=idperiodo).filter(idmateria=idmateria).filter(estado=True)
     return render(request,'ingles/city_dropdown_list_options.html', {'grupos': grupos})
     # return JsonResponse(list(cities.values('id', 'name')), safe=False)
 
@@ -423,3 +424,5 @@ class EliminarPeriodo(LoginRequiredMixin, SuperUsuarioMixin, DeleteView):
         object.save()
         return redirect('curso:listar_periodo')
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Error404View(TemplateView):
+    template_name = 'home/page-404.html' 

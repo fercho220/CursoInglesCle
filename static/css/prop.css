@@ -1,8 +1,8 @@
-.nav{
+/* .nav{
     display: flex;
     justify-content: space-between;
     background: #102A57;
-}
+} */
 .prin{
     display: flex;
     align-items: center;
@@ -12,8 +12,8 @@
     height: 70px;
 }
 .ita{
-    width: 270px;
-    height: 270px;
+    width: 100px;
+    height: 70px;
 }
 .sep{
     width: 300px;

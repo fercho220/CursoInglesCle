@@ -116,6 +116,7 @@ class Grupo(models.Model):
     idmodalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE, db_column='IdModalidad', blank=True, null=True)  # Field name made lowercase.
     horario = models.CharField(db_column='Horario', max_length=25, blank=True, null=True)  # Field name made lowercase.
     estado = models.BooleanField(default = True, verbose_name = 'Estado')
+    
     class Meta:
         verbose_name = 'Grupo'
         verbose_name_plural = 'Grupos'

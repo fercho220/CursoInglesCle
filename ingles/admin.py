@@ -1,6 +1,8 @@
 from django.contrib import admin
+from django.contrib import messages
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
+from .models import *
 
 # Register your models here.
 from ingles.models import Aula, Carrera, Docente, Estado, Materia, Periodo, Estudiante, Pago, Grupo, Det_Grupo,Modalidad
@@ -8,6 +10,10 @@ from ingles.models import Aula, Carrera, Docente, Estado, Materia, Periodo, Estu
 """class DetalleAdmni(resources.ModelResource):
     class Meta:
         model = Det_Grupo"""
+
+admin.site.site_header = 'Coordinación de Lenguas Extranjeras'
+admin.site.index_title = 'Panel de Control'
+admin.site.site_title = 'CLE | AppSeed'
 
 class Aulav(admin.ModelAdmin):
     list_display=('idaula','nombre')
@@ -41,8 +47,15 @@ class Estudiantev(admin.ModelAdmin):
 admin.site.register(Estudiante, Estudiantev)
 
 class Pagov(admin.ModelAdmin):
-    list_display=('foliopago','idmateria','idestudiante','idperiodo','fechapago','fechasist','idestado','monto','usuario')
-    list_filter = [ 'idmateria', 'idperiodo']
+    list_display=('foliopago','idmateria','idestudiante','idperiodo','idestado')
+    search_fields = ['idestudiante__nombre','idestudiante__nocontrol']
+    list_filter = [ 'idestado','idmateria', 'idperiodo']
+
+    def rate_five_stars(modeladmin, request, queryset):
+        queryset.update(idestado=2)
+        messages.success(request, "Se cambio a Aceptados")
+
+    admin.site.add_action(rate_five_stars, "Cambiar a Aceptados")
 admin.site.register(Pago, Pagov)
 
 class Grupov(admin.ModelAdmin):
