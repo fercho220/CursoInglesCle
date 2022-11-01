@@ -25,7 +25,7 @@
           <table class="table">
             <thead class=" text-primary">
               <th>Estudiante</th>
-              <th>Folio</th>
+              <!-- <th>Folio</th> -->
               {% if request.user.is_superuser %}
               <!-- <th>Calificación</th> -->
               <th>Opciones</th>
@@ -42,7 +42,7 @@
               <tr>
                 {% if grupodetalle.foliopago.idestado.estado == 'Aceptado' %}
                 <td>{{ grupodetalle.idestudiante }}</td>
-                <td>{{ grupodetalle.foliopago }}</td>
+                <!-- <td>{{ grupodetalle.foliopago }}</td> -->
                 <!-- <td>{{ grupodetalle.foliopago }}</td> -->
                 <td>{{ grupodetalle.calif }}</td>
                 {% if request.user.is_superuser %}

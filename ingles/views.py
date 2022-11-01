@@ -206,12 +206,6 @@ class CrearGrupoDetalle(LoginRequiredMixin, CreateView):
     form_class = GruposDetalleForm
     success_url = reverse_lazy('curso:listar_grupos')
 
-    # def form_valid(self, form):
-    #     self.object = form.save(commit=False)
-    #     self.object.idestudiante = Estudiante.objects.get(usuario = self.request.user)  
-    #     self.object.save()
-    #     return super(CrearGrupoDetalle, self).form_valid(form)
-
 class CrearGrupoDetalleAdm(LoginRequiredMixin, CreateView):
     model = Det_Grupo
     template_name = 'ingles/crear_gruposdetalle.html'
@@ -223,7 +217,12 @@ class EliminarGrupoDetalle(LoginRequiredMixin, SuperUsuarioMixin, DeleteView):
     success_url = reverse_lazy('curso:listar_grupos')
 
 def listaDetalle(request, id):
-    gruposdetalles = Det_Grupo.objects.filter(idgrupo = id)
+    gruposdetalles = Det_Grupo.objects.filter(idgrupo = id).order_by('idestudiante__nombre')
+    var = Det_Grupo.objects.filter(idgrupo = id).count()
+    print(var)
+    if var >= 25:
+        alumno = Grupo.objects.filter(idgrupo = id).update(estado=False)
+    
     return render(request,'ingles/listar_gruposdetalle.html', {'gruposdetalles': gruposdetalles})
 
 """ CRUD DOCENTES """
@@ -359,15 +358,8 @@ class CrearPago(LoginRequiredMixin, CreateView):
 def load_cities(request):
     idperiodo = request.GET.get('idperiodo')
     idmateria = request.GET.get('idmateria')
-    #grupos = Grupo.objects.filter(idmateria=idmateria)
     grupos = Grupo.objects.filter(idperiodo=idperiodo).filter(idmateria=idmateria).filter(estado=True)
     return render(request,'ingles/city_dropdown_list_options.html', {'grupos': grupos})
-    # return JsonResponse(list(cities.values('id', 'name')), safe=False)
-
-def load_cities2(request):
-    idperiodo = request.GET.get('idperiodo')
-    grupos = Grupo.objects.filter(idperiodo=idperiodo)
-    return render(request,'ingles/city_dropdown_list_options2.html', {'grupos': grupos})
 
 class EliminarPago(LoginRequiredMixin, SuperUsuarioMixin, DeleteView):
     model = Pago

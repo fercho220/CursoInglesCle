@@ -18566,13 +18566,22 @@ label {
 }
 
 @media all and (max-width: 991px) {
+    [class*="navbar-expand-"]>.container-fluid>.navbar-wrapperLI{
+        display: none;
+    }
+}
+@media all and (max-width: 652px) {
+    [class*="navbar-expand-"]>.container-fluid>.navbar-wrapperLT{
+        display: none;
+    }
+}
+@media all and (max-width: 991px) {
 
     [class*="navbar-expand-"]>.container,
     [class*="navbar-expand-"]>.container-fluid {
         padding-left: 15px;
         padding-right: 15px;
     }
-
     .navbar .navbar-collapse .navbar-nav>li.button-container {
         padding: 15px;
     }

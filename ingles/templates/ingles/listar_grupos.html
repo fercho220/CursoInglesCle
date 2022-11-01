@@ -49,8 +49,8 @@
                   class="btn btn-outline-info"><i class="material-icons"> visibility</i></a>
                 {% if request.user.is_superuser %}
                 <button onclick="abrir_modal_ediciong('{% url 'ingles:editar_grupos' grupo.idgrupo %}')"
-                  class="btn btn-outline-secondary">Editar</button>
-                <a href="{% url 'ingles:eliminar_grupos' grupo.idgrupo %}" class="btn btn-outline-danger">Eliminar</a>
+                class="btn btn-outline-warning"><i class="material-icons"> mode_edit</i></button>
+                <a href="{% url 'ingles:eliminar_grupos' grupo.idgrupo %}" class="btn btn-outline-danger"><i class="material-icons"> remove_circle</i></a>
                 {% endif %}
               </td>
             </tr>
