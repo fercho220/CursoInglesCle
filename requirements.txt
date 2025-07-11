@@ -29,3 +29,4 @@ tzdata==2024.1
 whitenoise
 django-crispy-forms
 crispy-bootstrap4
+djangorestframework
