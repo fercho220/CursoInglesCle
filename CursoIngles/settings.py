@@ -2,7 +2,7 @@
 
 import os
 from pathlib import Path
-import os # Asegúrate de que esta línea esté solo una vez si ya existe
+# No necesitas 'import os' dos veces, una es suficiente.
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -11,20 +11,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # CONFIGURACIÓN DE PRODUCCIÓN PARA ALWAYSDAATA
 # ==============================================================================
 
-# IMPORTANTE: NUNCA expongas tu SECRET_KEY. Léela de una variable de entorno.
-# En la configuración de tu sitio Python en Alwaysdata, en "Environment variables",
-# añade una variable llamada SECRET_KEY con tu valor real.
-SECRET_KEY = os.environ.get('SECRET_KEY', 'TU_SECRET_KEY_ORIGINAL_ALEATORIA')# O si quieres un fallback para local: 
+# IMPORTANTE: NUNCA expongas tu SECRET_KEY en el código. Léela de una variable de entorno.
+# La segunda parte es solo un valor por defecto para desarrollo si la variable no existe.
+# Usa la clave segura que generaste.
+SECRET_KEY = os.environ.get('SECRET_KEY', '9KaS,bXT*&H$qf4')
+
 # En producción, DEBUG siempre debe ser False por seguridad y rendimiento.
 DEBUG = False
 
 # Aquí deben ir los dominios de tu sitio en Alwaysdata.
 # CAMBIA 'cle.alwaysdata.net' por el dominio real de tu sitio en Alwaysdata.
-ALLOWED_HOSTS = ['cle.alwaysdata.net'] # <<< CAMBIA ESTO por tu dominio de Alwaysdata >>>
+ALLOWED_HOSTS = ['cle.alwaysdata.net'] # <<< TU DOMINIO DE ALWAYSDAATA >>>
 
 # Es buena práctica añadir el dominio con https para peticiones seguras.
 # CAMBIA 'cle.alwaysdata.net' por el dominio real de tu sitio en Alwaysdata.
-CSRF_TRUSTED_ORIGINS = ['https://cle.alwaysdata.net'] # <<< CAMBIA ESTO por tu dominio de Alwaysdata >>>
+CSRF_TRUSTED_ORIGINS = ['https://cle.alwaysdata.net'] # <<< TU DOMINIO DE ALWAYSDAATA >>>
 
 
 # Application definition
@@ -42,7 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'bootstrapform',
-    #'django_admin_listfilter_dropdown',
+    #'django_admin_listfilter_dropdown', # Si no está instalada, mejor comenta o borra
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -88,7 +89,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Motor para PostgreSQL
         'NAME': 'cle_db_app',                             # <<< TU NOMBRE DE BASE DE DATOS DE ALWAYSDAATA (ej. cle_db_app) >>>
         'USER': 'cle',                                    # <<< TU USUARIO DE ALWAYSDAATA (ej. cle) >>>
-        'PASSWORD': 'Neymar00229@',  # <<< LA CONTRASEÑA QUE PUSISTE AL CREAR LA DB >>>
+        'PASSWORD': os.environ.get('DB_PASSWORD'),        # LEE DE VARIABLE DE ENTORNO
         'HOST': 'postgresql-cle.alwaysdata.net',          # <<< EL HOST DE POSTGRESQL DE ALWAYSDAATA (ej. postgresql-cle.alwaysdata.net) >>>
         'PORT': '5432',                                   # Puerto estándar de PostgreSQL
     }
@@ -115,10 +116,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 # Directorio donde `collectstatic` dejará todos los archivos estáticos para producción.
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' # <-- AÑADIDO
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media' # Esto apunta a una carpeta local en el servidor
+MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -128,10 +129,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Es una muy mala práctica de seguridad poner contraseñas en el código.
 # Añade tu contraseña de email como una variable de entorno en Alwaysdata.
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp.office365.com' # Servidor SMTP para Hotmail/Outlook.com
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'soportecleita@gmail.com'
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD') # <-- CAMBIADO
+EMAIL_HOST_USER = 'fernandozil24@hotmail.com' # <-- TU CORREO DE HOTMAIL AQUÍ
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD') # LEE DE VARIABLE DE ENTORNO
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
