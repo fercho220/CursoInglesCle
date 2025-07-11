@@ -14,8 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # IMPORTANTE: NUNCA expongas tu SECRET_KEY. Léela de una variable de entorno.
 # En la configuración de tu sitio Python en Alwaysdata, en "Environment variables",
 # añade una variable llamada SECRET_KEY con tu valor real.
-SECRET_KEY = os.environ.get('SECRET_KEY', 'Neymar00229@')
-
+SECRET_KEY = os.environ.get('SECRET_KEY', 'TU_SECRET_KEY_ORIGINAL_ALEATORIA')# O si quieres un fallback para local: 
 # En producción, DEBUG siempre debe ser False por seguridad y rendimiento.
 DEBUG = False
 
