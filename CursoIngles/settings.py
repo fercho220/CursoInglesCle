@@ -89,7 +89,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Motor para PostgreSQL
         'NAME': 'cle_db_app',                             # <<< TU NOMBRE DE BASE DE DATOS DE ALWAYSDAATA (ej. cle_db_app) >>>
         'USER': 'cle',                                    # <<< TU USUARIO DE ALWAYSDAATA (ej. cle) >>>
-        'PASSWORD': 'TU_CONTRASEÑA_DE_LA_BASE_DE_DATOS',  # <<< LA CONTRASEÑA QUE PUSISTE AL CREAR LA DB >>>
+        'PASSWORD': 'Neymar00229@',  # <<< LA CONTRASEÑA QUE PUSISTE AL CREAR LA DB >>>
         'HOST': 'postgresql-cle.alwaysdata.net',          # <<< EL HOST DE POSTGRESQL DE ALWAYSDAATA (ej. postgresql-cle.alwaysdata.net) >>>
         'PORT': '5432',                                   # Puerto estándar de PostgreSQL
     }
