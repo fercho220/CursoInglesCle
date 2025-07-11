@@ -14,7 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # IMPORTANTE: NUNCA expongas tu SECRET_KEY en el código. Léela de una variable de entorno.
 # La segunda parte es solo un valor por defecto para desarrollo si la variable no existe.
 # Usa la clave segura que generaste.
-SECRET_KEY = os.environ.get('SECRET_KEY', '9KaS,bXT*&H$qf4')
+SECRET_KEY = os.environ.get('SECRET_KEY', '9KaS,bXT*&H$qf4') # <-- USANDO LA CLAVE SEGURA
 
 # En producción, DEBUG siempre debe ser False por seguridad y rendimiento.
 DEBUG = False
@@ -41,8 +41,8 @@ INSTALLED_APPS = [
     'import_export',
     'crispy_forms',
     'rest_framework',
-    'django_filters',
-    'bootstrapform',
+    'django_filters', # <-- Asegúrate que 'django-filter' esté en requirements.txt
+    'bootstrapform',  # <-- Asegúrate que 'django-bootstrap-form' esté en requirements.txt
     #'django_admin_listfilter_dropdown', # Si no está instalada, mejor comenta o borra
 ]
 
@@ -59,26 +59,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'CursoInglesCle.urls' # Asegúrate que sea 'CursoInglesCle.urls' si tu carpeta principal es CursoInglesCle
-
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
-
-WSGI_APPLICATION = 'CursoInglesCle.wsgi.application' # Asegúrate que sea 'CursoInglesCle.wsgi.application'
-
+# ¡¡¡CORRECCIÓN CLAVE AQUÍ: 'CursoIngles' es el nombre de tu módulo interno!!!
+ROOT_URLCONF = 'CursoIngles.urls'
+# ...
+WSGI_APPLICATION = 'CursoIngles.wsgi.application' # <-- CORRECCIÓN CLAVE AQUÍ
 # ==============================================================================
 # BASE DE DATOS (PostgreSQL para Alwaysdata)
 # ==============================================================================
