@@ -1,29 +1,32 @@
-# settings.py adaptado para PythonAnywhere
+# settings.py adaptado para Alwaysdata con PostgreSQL
 
 import os
 from pathlib import Path
-import os # <-- AÑADIDO para leer variables de entorno
+import os # Asegúrate de que esta línea esté solo una vez si ya existe
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ==============================================================================
-# CONFIGURACIÓN DE PRODUCCIÓN PARA PYTHONANYWHERE
+# CONFIGURACIÓN DE PRODUCCIÓN PARA ALWAYSDAATA
 # ==============================================================================
 
 # IMPORTANTE: NUNCA expongas tu SECRET_KEY. Léela de una variable de entorno.
-# En la pestaña "Web" de PythonAnywhere, ve a "Environment variables" y añade una llamada SECRET_KEY.
+# En la configuración de tu sitio Python en Alwaysdata, en "Environment variables",
+# añade una variable llamada SECRET_KEY con tu valor real.
 SECRET_KEY = os.environ.get('SECRET_KEY', 'una-llave-secreta-temporal-para-desarrollo')
 
 # En producción, DEBUG siempre debe ser False por seguridad y rendimiento.
 DEBUG = False
 
-# Aquí solo debe ir tu dominio de PythonAnywhere.
-# CAMBIA 'tunombredeusuario' por tu nombre de usuario real en PythonAnywhere.
-ALLOWED_HOSTS = ['tunombredeusuario.pythonanywhere.com']
+# Aquí deben ir los dominios de tu sitio en Alwaysdata.
+# CAMBIA 'cle.alwaysdata.net' por el dominio real de tu sitio en Alwaysdata.
+ALLOWED_HOSTS = ['cle.alwaysdata.net'] # <<< CAMBIA ESTO por tu dominio de Alwaysdata >>>
 
 # Es buena práctica añadir el dominio con https para peticiones seguras.
-CSRF_TRUSTED_ORIGINS = ['https://tunombredeusuario.pythonanywhere.com']
+# CAMBIA 'cle.alwaysdata.net' por el dominio real de tu sitio en Alwaysdata.
+CSRF_TRUSTED_ORIGINS = ['https://cle.alwaysdata.net'] # <<< CAMBIA ESTO por tu dominio de Alwaysdata >>>
+
 
 # Application definition
 INSTALLED_APPS = [
@@ -47,7 +50,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', # <-- AÑADIDO para servir archivos estáticos
+    'whitenoise.middleware.WhiteNoiseMiddleware', # Para servir archivos estáticos
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -56,7 +59,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'CursoIngles.urls'
+ROOT_URLCONF = 'CursoInglesCle.urls' # Asegúrate que sea 'CursoInglesCle.urls' si tu carpeta principal es CursoInglesCle
 
 TEMPLATES = [
     {
@@ -74,22 +77,21 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'CursoIngles.wsgi.application'
+WSGI_APPLICATION = 'CursoInglesCle.wsgi.application' # Asegúrate que sea 'CursoInglesCle.wsgi.application'
 
 # ==============================================================================
-# BASE DE DATOS (MySQL para PythonAnywhere Gratuito)
+# BASE DE DATOS (PostgreSQL para Alwaysdata)
 # ==============================================================================
-# El plan gratuito de PythonAnywhere solo soporta MySQL.
-# Debes crear la base de datos en la pestaña "Databases" de PythonAnywhere
-# y rellenar estos datos.
+# Aquí debes usar los datos de tu base de datos PostgreSQL de Alwaysdata.
+# Los obtuviste en el Paso 1 de la configuración de Alwaysdata.
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'tunombredeusuario$nombredb',       # Lo obtienes de la pestaña "Databases"
-        'USER': 'tunombredeusuario',               # Tu usuario de PythonAnywhere
-        'PASSWORD': 'la_contraseña_de_tu_db',      # La que pusiste al crear la DB
-        'HOST': 'tunombredeusuario.mysql.pythonanywhere-services.com', # Lo obtienes de la pestaña "Databases"
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Motor para PostgreSQL
+        'NAME': 'cle_db_app',                             # <<< TU NOMBRE DE BASE DE DATOS DE ALWAYSDAATA (ej. cle_db_app) >>>
+        'USER': 'cle',                                    # <<< TU USUARIO DE ALWAYSDAATA (ej. cle) >>>
+        'PASSWORD': 'TU_CONTRASEÑA_DE_LA_BASE_DE_DATOS',  # <<< LA CONTRASEÑA QUE PUSISTE AL CREAR LA DB >>>
+        'HOST': 'postgresql-cle.alwaysdata.net',          # <<< EL HOST DE POSTGRESQL DE ALWAYSDAATA (ej. postgresql-cle.alwaysdata.net) >>>
+        'PORT': '5432',                                   # Puerto estándar de PostgreSQL
     }
 }
 
@@ -117,7 +119,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' # <-- AÑADIDO
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = BASE_DIR / 'media' # Esto apunta a una carpeta local en el servidor
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -125,7 +127,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CONFIGURACIÓN DE EMAIL (Usando Variables de Entorno)
 # ==============================================================================
 # Es una muy mala práctica de seguridad poner contraseñas en el código.
-# Añade tu contraseña de email como una variable de entorno en PythonAnywhere.
+# Añade tu contraseña de email como una variable de entorno en Alwaysdata.
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
