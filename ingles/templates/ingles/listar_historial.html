@@ -1,0 +1,182 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<div class="table-responsive">
+{% if estudiantes %}
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header card-header-primary">
+        <h4 class="card-title ">Estudiante</h4>
+      </div>
+      <div class="card-body">
+        <table class="table table-responsive">
+          <thead class=" text-primary">
+            <th><h5>Nombre</h5></th>
+            <th><h5>Numero de Control</h5></th>
+            <th><h5>Carrera</h5></th>
+            <th><h5>Correo Electronico</h5></th>
+            <th><h5>Genero</h5></th>
+            <th><h5>Opciones</h5></th>
+          </thead>
+          <tbody>
+            {% for estudiante in estudiantes %}
+            {% if forloop.first %}
+            <tr>
+              <td><h5>{{ estudiante.nombre }} {{ estudiante.apellidop }} {{ estudiante.apellidom }}</h5></td>
+              <td><h5>{{ estudiante.nocontrol }}</h5></td>
+              <td><h5>{{ estudiante.idcarrera }}</h5></td>
+              <td><h5>{{ estudiante.email }}</h5></td>
+              <td><h5>{% if estudiante.genero  == 'M' %} Masculino 
+                {% elif estudiante.genero  == 'F'%} Femenino 
+                {% else %} {{estudiante.genero}}
+                {% endif %} </h5></td>
+              <!-- <td>{{ estudiante.pagocurso }}</td>
+                    <td>{{ estudiante.pagomaterial }}</td> -->
+              <td>
+                <a href="/admin/ingles/estudiante/{{ estudiante.idestudiante }}/change/">
+                <button
+                  class="btn btn-outline-secondary">Ir a control</button>
+                </a>
+              </td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+        <div class="card-header card-header-primary">
+          <h4 class="card-title ">Seguimiento del estudiante</h4>
+        </div>
+        <div class="card-body">
+          <div>
+            <table class="table table-responsive">
+              <thead class=" text-primary">
+
+                <th><img id="nivel1" src="{% static 'img/nivel/gris1.png' %}" style="width: 50px; height: 50px;"/></th>
+                <th><img id="nivel2" src="{% static 'img/nivel/gris2.png' %}" style="width: 50px; height: 50px;"/></th>
+                <th><img id="nivel3" src="{% static 'img/nivel/gris3.png' %}" style="width: 50px; height: 50px;"/></th>
+                <th><img id="nivel4" src="{% static 'img/nivel/gris4.png' %}" style="width: 50px; height: 50px;"/></th>
+                <th><img id="nivel5" src="{% static 'img/nivel/gris5.png' %}" style="width: 50px; height: 50px;"/></th>
+
+
+                  {% for estudiante in grupos %}
+                      {% if estudiante.grupos.idgrupo.idmateria.nombremateria == 'NIVEL 1' %}
+                          {% if estudiante.grupos.calif %}
+                          <script>
+                            document.getElementById('nivel1').src = "{% static 'img/nivel/azul1.png' %}";
+                            </script>
+                          {% endif %}
+                      {% elif estudiante.grupos.idgrupo.idmateria.nombremateria == 'NIVEL 2' %}
+                          {% if estudiante.grupos.calif %}
+                          <script>
+                            document.getElementById('nivel2').src = "{% static 'img/nivel/azul2.png' %}";
+                            </script>
+                          {% endif %}
+                      {% elif estudiante.grupos.idgrupo.idmateria.nombremateria == 'NIVEL 3' %}
+                          {% if estudiante.grupos.calif %}
+                          <script>
+                            document.getElementById('nivel3').src = "{% static 'img/nivel/azul3.png' %}";
+                            </script>
+                          {% endif %}
+                      {% elif estudiante.grupos.idgrupo.idmateria.nombremateria == 'NIVEL 4' %}
+                          {% if estudiante.grupos.calif %}
+                          <script>
+                            document.getElementById('nivel4').src = "{% static 'img/nivel/azul4.png' %}"; 
+                            </script>
+                          {% endif %}
+                      {% elif estudiante.grupos.idgrupo.idmateria.nombremateria == 'NIVEL 5' %}
+                          {% if estudiante.grupos.calif %}
+                          <script>
+                          document.getElementById('nivel5').src = "{% static 'img/nivel/azul5.png' %}";                       
+                          </script>
+                          {% endif %}
+                      {% endif %}
+                  {% endfor %}                
+
+                <th><img src="{% static 'img/nivel/descripcion.png' %}" style="width: 125px; height: 45px;"></th>
+              </thead>
+            </table>
+          </div>
+          <table class="table table-responsive">
+            <thead class=" text-primary">
+              <th  style="width:10%"><h5>Periodo</h5></th>
+              <th><h5>Modalidad</h5></th>
+              <th><h5>Nivel</h5></th>
+              <th><h5>Grupo</h5></th>
+              <th><h5>Horario</h5></th>
+              <th><h5>Aula</h5></th>
+              <th><h5>Calificación</h5></th>
+              <th><h5>Ver grupo</h5></th>
+              <th><h5>Estado</h5></th>
+            </thead>
+            <tbody>
+              {% for estudiante in grupos %}
+              <tr>
+                <td><h5>{{ estudiante.grupos.idperiodo.periodo }}</h5></td>
+                <td><h5>{{ estudiante.grupos.idgrupo.idmodalidad.modalidad }}</h5></td>
+                <td><h5>{{ estudiante.grupos.idgrupo.idmateria.nombremateria }}</h5></td>
+                <td><h5>{{ estudiante.grupos.idgrupo.grupo }}</h5></td>
+                <td><h5>{{ estudiante.grupos.idgrupo.horario }}</h5></td>
+                <td><h5>{{ estudiante.grupos.idgrupo.idaula.nombre }}</h5></td>
+                <td><h5>
+                  {% if estudiante.grupos.calif >= 96 %}
+                      Con distinción
+                  {% else %}
+                      {{ estudiante.grupos.calif }}
+                  {% endif %}
+                </h5></td>
+                <td><center>
+                  {% if estudiante.grupos.idgrupo.idgrupo %}
+                  <a href="{% url 'ingles:listar_gruposdetalles' estudiante.grupos.idgrupo.idgrupo %}"><i class="fa-solid fa-eye"
+                    style="font-size:20px;color:rgb(0, 119, 255);"></i></a>
+                  {% else %}
+                    No hay grupo asignado
+                  {% endif%}
+                    </center>
+                </td>
+                {% if estudiante.grupos.aprobado == 1 %}
+                <td style="background-color: rgb(105, 208, 105);"><h5>Aprobado</h5></td>
+                {% elif estudiante.grupos.aprobado == 2 %}
+                <td style="background-color: rgb(255, 79, 79);"><h5>Reprobado</h5></td>
+                {% elif estudiante.grupos.aprobado == 4 %}
+                <td style="background-color: rgb(255, 252, 79);"><h5>Super Aprobado <br>(error)</h5></td>
+                {% else %}
+                <td style="background-color: rgb(191, 189, 189);"><h5>Pendiente</h5></td>
+                {% endif %}
+                <!-- <td>{{ estudiante.pagocurso }}</td>
+                      <td>{{ estudiante.pagomaterial }}</td> -->
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        
+        {% else %}
+        <h1>No Existe Estudiantes Registrados</h1>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endif %}
+
+<div class="modal fade" id="edicion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog">
+
+</div>
+{% block extrajs %}
+<script type="text/javascript">
+  var $ = jQuery.noConflict();
+  function abrir_modal_edicion(url) {
+    $('#edicion').load(url, function () {
+      $(this).modal('show');
+    });
+  }
+</script>
+{% endblock extrajs %}
+{% endblock content %}

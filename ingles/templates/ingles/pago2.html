@@ -1,0 +1,140 @@
+<style>
+    .custom-modal {
+        max-width: 70%;
+    }
+
+    .image-container {
+        position: relative;
+    }
+
+    .zoom-icon {
+        position: absolute;
+        top: 10px; /* ajusta la posición vertical según tu diseño */
+        right: 10px; /* ajusta la posición horizontal según tu diseño */
+        background-color: rgba(255, 255, 255, 0.925); /* color de fondo del botón */
+        padding: 10px; /* espacio interior del botón */
+        border-radius: 50%; /* forma circular del botón */
+        font-size: 20px;
+        cursor: pointer;
+        border: 2px solid;
+        border-color: rgb(93, 93, 93);
+    }
+</style>
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title">Verificar pago | Departamento de Recursos Financieros</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <form id="paymentForm" action="{% url 'ingles:editar_pago2' object.foliopago %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-7">
+                        {% if object.pagocurso %}
+                        <div class="image-container">
+                            {% if object.pagocurso.name|lower|slice:"-3:" == "pdf" %}
+                            <!-- Si es un archivo PDF -->
+                            <object data="{{ object.pagocurso.url }}" type="application/pdf" width="100%" height="600px">
+                                <p>No se puede visualizar este tipo de archivo (.pdf).</p>
+                                <p>Puedes abrir el archivo desde <a href="{{ object.pagocurso.url }}" target="_blank">aquí</a></p>    
+                            </object>
+                            <div class="zoom-icon" onclick="openImage('{{ object.pagocurso.url }}')">🔍</div> 
+                            {% else %}
+                            <!-- Si es una imagen -->
+                            <center><img style="max-width: 100%; height: 100%; max-height: 600px;" src="{{ object.pagocurso.url }}" alt="Imagen del pago" /></center>
+                            <div class="zoom-icon" onclick="openImage('{{ object.pagocurso.url }}')">🔍</div>
+                            {% endif %}
+                        </div>
+                        {% else %}
+                        <strong style="color: rgb(255, 0, 0);">El alumno no registró imagen del pago.</strong>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-5">
+                        <div style="border: 4px solid; border-color: rgb(172, 182, 179); padding: 10px; border-radius: 5px;">
+                            <h3>Datos del pago</h3>
+                            <h5>
+                                <tit style="color: rgb(0, 13, 255);">Estudiante:</tit> {{object.idestudiante}}<br>
+                                <tit style="color: rgb(0, 13, 255);">No.Control:</tit> {{object.usuario}} <br>
+                                <tit style="color: rgb(0, 13, 255);">Período:</tit> {{object.idperiodo}} <br>
+                                <tit style="color: rgb(0, 13, 255);">Nivel:</tit> {{object.idmateria}} <br>
+                                <tit style="color: rgb(0, 13, 255);">Grupo:</tit> {{object.idgrupo}} <br>
+                                <tit style="color: rgb(0, 13, 255);">Monto:</tit> {{object.monto}} <br>
+                            </h5>
+                        </div>
+
+                        {{ form.as_p }}
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-outline-primary" data-bs-dismiss="modal">Confirmar y enviar</button>                            
+                        </div>
+                        <center><button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" onclick="confirmOnly()">Solo confirmar</button></center>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openImage(imageUrl) {
+        window.open(imageUrl, '_blank');
+    }
+</script>
+<script>
+    $(document).ready(function() {
+        $('#paymentForm').submit(function(event) {
+            event.preventDefault(); // Prevenir el envío normal del formulario
+
+            // Realizar la petición AJAX
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                dataType: 'html',  // Esperamos una respuesta HTML para volver a cargar la página
+                success: function(data) {
+                    $('#myModal').modal('hide'); // Cerrar el modal
+                    $('body').removeClass('modal-open'); // Remover la clase que bloquea el scroll
+                    $('.modal-backdrop').remove(); // Remover el fondo oscuro del modal
+                    $('#modalContainer').html(data); // Actualizar el contenido del modal si es necesario
+                },
+                error: function(xhr, status, error) {
+                    // Manejar errores de red o de servidor
+                    alert('Error en la solicitud: ' + error);
+                }
+            });
+        });
+    });
+</script>
+<script>
+    // Función para "Solo confirmar"
+    function confirmOnly() {
+        const form = document.getElementById('paymentForm');
+        form.action = "{% url 'ingles:editar_pago3' object.foliopago %}";
+        
+        // Envío del formulario mediante AJAX
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: $(form).serialize(),
+            dataType: 'html',
+            success: function(data) {
+                // Puedes manejar la respuesta si es necesario
+                console.log('Solicitud enviada exitosamente');
+            },
+            error: function(xhr, status, error) {
+                alert('Error en la solicitud: ' + error);
+            }
+        });
+
+        return false; // Evita el envío normal del formulario
+    }
+
+    // Asociar la función al botón "Solo confirmar"
+    $(document).ready(function() {
+        $('#confirmOnlyBtn').click(function() {
+            confirmOnly();
+        });
+    });
+</script>

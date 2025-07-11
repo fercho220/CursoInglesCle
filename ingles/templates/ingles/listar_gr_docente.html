@@ -1,0 +1,149 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  th {
+    text-align: center;
+    font-size: 14px;
+  }
+
+  td {
+    font-size: 15px;
+  }
+
+  p {
+    font-size: 18px;
+    padding: 5px;
+    margin: 0%;
+  }
+</style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+<!-- {% if request.user.is_superuser %}
+<div>
+  <button class="btn btn-outline-primary btn-sm" type="button"
+    onclick="abrir_modal_creaciong('{% url 'curso:crear_grupos' %}')">Agregar Grupo</button>
+</div>
+{% endif %} -->
+<div class="table-responsive">
+  {% if var %}
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        {% for grupo in var %}
+        {%if forloop.first%}
+        <div class="card-header card-header-primary">
+          <h4 class="card-title ">Grupos | Docentes | {{ grupo.grupos.iddocente }}</h4>
+        </div>
+        {%endif%}
+        {% endfor %}
+        <div class="card-body">
+          <table class="table table-responsive" id="data">
+            <thead class=" text-primary">
+              <th style="width:5%">#</th>
+              <th style="width:10%">Periodo</th>
+              <th style="width:10%">Curso</th>
+              <th>Docente</th>
+              <th style="width:10%">Aula</th>
+              <th style="width:10%">Modalidad</th>
+              <th>Horario</th>
+              <th style="width:5%">Gpo.</th>
+              <th style="width:5%">Est.</th>
+              <th style="width:12%">Opciones</th>
+              {% for grupo in var %}
+              {%if forloop.first%}
+              <!-- <h3>Periodo: {{ grupo.idperiodo}}</h3> -->
+            </thead>
+            <tbody>
+              {%endif%}
+              <tr>
+                <td>{{ forloop.counter}}</td>
+                <td>{{ grupo.grupos.idperiodo}}</td>
+                <td>{{ grupo.grupos.idmateria}}</td>
+                <td>{{ grupo.grupos.iddocente }}</td>
+                <td>{{ grupo.grupos.idaula }}</td>
+                <td>{{ grupo.grupos.idmodalidad }}</td>
+                <td>{{ grupo.grupos.horario }}</td>
+                <td>{{ grupo.grupos.grupo }}</td>
+                <td>{{ grupo.counter }}</td>
+                <td>
+                  <a href="{% url 'ingles:listar_gruposdetalles' grupo.grupos.idgrupo %}"><i class="fa-solid fa-eye"
+                    style="font-size:20px;color:rgb(0, 119, 255);"></i></a>
+                {% if request.user.is_superuser %}
+
+
+                <!-- <a href="{% url 'ingles:eliminar_grupos' grupo.grupos.idgrupo %}"
+                  class="btn btn-outline-danger btn-sm"><i class="material-icons"> remove_circle</i></a> -->
+                <a href="{% url 'ingles:saleF' grupo.grupos.idgrupo %}"><i class="fa-solid fa-file-pdf"
+                    style="font-size:20px;color:red;"></i></a>
+                <a href="{% url 'ingles:Excel' grupo.grupos.idgrupo %}"><i class="fa-sharp fa-solid fa-table"
+                    style="font-size:20px;color:green;"></i></a>
+                <a onclick="abrir_modal_ediciong('{% url 'ingles:editar_grupos' grupo.grupos.idgrupo %}')"><i
+                    class="fa-solid fa-circle-up" style="font-size:20px;color:orangered;"></i></a>
+                    <!-- estadisticas -->
+                <a href="{% url 'ingles:estadisticas' grupo.grupos.idgrupo  %}"><i
+                    class="fas fa-chart-bar fa-rotate-270" style="font-size: 20px; color: rgb(0, 119, 255)"></i></a>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+
+            <!--  Page content-->
+          </table>
+          {% else %}
+          <h1>No Existen Grupos Registrados</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+<div class="modal fade" id="creaciong" role="dialog">
+
+</div>
+
+<div class="modal fade" id="ediciong" role="dialog">
+
+</div>
+
+
+{% block javascripts %}
+<script type="text/javascript">
+  var $ = jQuery.noConflict();
+  function abrir_modal_ediciong(url) {
+    $('#ediciong').load(url, function () {
+      $(this).modal('show');
+    });
+  }
+  function abrir_modal_creaciong(url) {
+    $('#creaciong').load(url, function () {
+      $(this).modal('show');
+    });
+  } 
+</script>
+
+<script type="application/javascript">
+  $(document).ready(function () {
+    $('#data').DataTable({
+      "language": {
+        url: "{% static 'lib/spanish.txt' %}"
+      },
+
+    });
+  });
+</script>
+{% endblock javascripts %}
+{% endblock content %}

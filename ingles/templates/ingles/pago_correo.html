@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Estado de pago | {{object.idperiodo}}</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #f6f6f6;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff;">
+        <h1 style="color: #333333; text-align: center;">Estado de pago | {{object.idperiodo}}</h1>
+        <p>Hola <strong>{{ object.idestudiante }}</strong>,</p>
+        <p>Buen día estimado(a), recibimos tu comprobante de pago para cursar <strong>Lenguas Extranjeras</strong> en el período <strong>{{ object.idperiodo }}</strong>.</p>
+        <p>Con los siguientes detalles:</p>
+        <p>     Nivel: <strong>{{ object.idmateria }}</strong>.</p>
+        <p>     Grupo: <strong>{{ object.idgrupo }}</strong>.</p>
+        <br>
+        <p>Te informamos que el estado del pago es: <strong style="color: blueviolet;">{{ object.idestado }}</strong>.</p>
+        {% if object.descripcion.strip != "" %}
+        <p><strong style="color: red;">{{ object.descripcion }}</strong></p>
+        <p>Puedes editar tu pago en: cle.acapulco.tecnm.mx</p>
+        {%endif%}
+        <br>
+        <p>Para cualquier duda o aclaración, comunícate con el Departamento de Recursos Financieros o Coordinación de Lenguas Extranjeras.</p>
+        <strong>Departamento de Recursos Financieros</strong>
+        <p>Horario: lunes a viernes 9:00 AM a 3:00 PM</p>
+        <p>Correo: rf_acapulco@tecnm.mx</p>
+        <br>
+        <strong>Coordinación de Lenguas Extranjeras</strong>
+        <p>Horario: lunes a viernes 8:00 AM a 6:00 PM</p>
+        <p>Correo: cle@acapulco.tecnm.mx</p>
+        <p>Gracias por tu tiempo.</p>
+        <strong>Atentamente,</strong>
+        <br>
+        <strong>Coordinación de Lenguas Extranjeras.</strong>
+    </div>
+</body>
+</html>

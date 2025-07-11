@@ -1,70 +1,121 @@
 {% extends "layouts/base.html" %}
-
+{% load static %}
 {% block title %} UI Tables {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  th {
+    text-align: center;
+    font-size: 14px;
+  }
+
+  td {
+    font-size: 15px;
+  }
+
+  p {
+    font-size: 18px;
+    padding: 5px;
+    margin: 0%;
+  }
+</style>
+
+{% endblock stylesheets %}
 
 {% block content %}
-{% if request.user.is_superuser %}
+<!-- {% if request.user.is_superuser %}
 <div>
-  <button class="btn btn-outline-primary" type="button"
+  <button class="btn btn-outline-primary btn-sm" type="button"
     onclick="abrir_modal_creaciong('{% url 'curso:crear_grupos' %}')">Agregar Grupo</button>
 </div>
-{% endif %}
+{% endif %} -->
+
 <div class="table-responsive">
-{% if grupos %}
-<div class="row">
-  <div class="col-md-12">
-    <div class="card">
-      <div class="card-header card-header-primary">
-        <h4 class="card-title ">Grupos</h4>
-      </div>
-      <div class="card-body">
-        <table class="table">
-          <thead class=" text-primary">
-            <th>Periodo</th>
-            <th>Curso</th>
-            <th>Docente</th>
-            <th>Aula</th>
-            <th>Modalidad</th>
-            <th>Horario</th>
-            <th>Opciones</th>
-            {% for grupo in grupos %}
+  {% if request.user.is_superuser %}
+  {% else %}
 
-            {%if forloop.first%}
-            <!-- <h3>Periodo: {{ grupo.idperiodo}}</h3> -->
-          </thead>
-          <tbody>
-            {%endif%}
-            <tr>
-              <td>{{ grupo.idperiodo}}</td>
-              <td>{{ grupo.idmateria}}</td>
-              <td>{{ grupo.iddocente }}</td>
-              <td>{{ grupo.idaula }}</td>
-              <td>{{ grupo.idmodalidad }}</td>
-              <td>{{ grupo.horario }}</td>
-              <td>
-                <a href="{% url 'ingles:listar_gruposdetalles' grupo.idgrupo %}"
-                  class="btn btn-outline-info"><i class="material-icons"> visibility</i></a>
+  <div style="padding:5px; margin-top: 10px; color:brown; border: solid 1px; border-radius: 2px; display: inline-block; background-color: rgb(255, 255, 255); border-color: rgb(22, 37, 82);">
+    <h4 style="font-size: 14px;">ℹ️ Para ingresar a un grupo debes registrar tu comprobante de pago previamente sellado por el Departamento de Recursos Financieros.</h4>
+  </div>
+
+  {% endif %}
+  {% if var %}
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          <h4 class="card-title ">Grupos</h4>
+        </div>
+        <div class="card-body">
+          <table class="table table-responsive" id="data">
+            <thead class=" text-primary">
+              <th style="width:5%">#</th>
+              <th style="width:10%">Periodo</th>
+              <th style="width:10%">Curso</th>
+              <th>Docente</th>
+              <th style="width:10%">Aula</th>
+              <th style="width:10%">Modalidad</th>
+              <th>Horario</th>
+              <th style="width:5%">Gpo.</th>
+              <th style="width:5%">Est.</th>
+              <th style="width:12%">Opciones</th>
+              {% for grupo in var %}
+              {%if forloop.first%}
+              <!-- <h3>Periodo: {{ grupo.idperiodo}}</h3> -->
+            </thead>
+            <tbody>
+              {%endif%}
+              <tr>
+                <td>{{ forloop.counter}}</td>
+                <td>{{ grupo.grupos.idperiodo}}</td>
+                <td>{{ grupo.grupos.idmateria}}</td>
+                <td>{{ grupo.grupos.iddocente }}</td>
+                <td>{{ grupo.grupos.idaula }}</td>
+                <td>{{ grupo.grupos.idmodalidad }}</td>
+                <td>{{ grupo.grupos.horario }}</td>
+                <td>{{ grupo.grupos.grupo }}</td>
+                <td>{{ grupo.counter }}</td>
+                <td>
+                  <a href="{% url 'ingles:listar_gruposdetalles' grupo.grupos.idgrupo %}"><i class="fa-solid fa-eye"
+                    style="font-size:20px;color:rgb(0, 119, 255);"></i></a>
                 {% if request.user.is_superuser %}
-                <button onclick="abrir_modal_ediciong('{% url 'ingles:editar_grupos' grupo.idgrupo %}')"
-                class="btn btn-outline-warning"><i class="material-icons"> mode_edit</i></button>
-                <a href="{% url 'ingles:eliminar_grupos' grupo.idgrupo %}" class="btn btn-outline-danger"><i class="material-icons"> remove_circle</i></a>
-                {% endif %}
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
 
-          <!--  Page content-->
-        </table>
-        {% else %}
-        <h1>No Existen Grupos Registrados</h1>
+
+                <!-- <a href="{% url 'ingles:eliminar_grupos' grupo.grupos.idgrupo %}"
+                  class="btn btn-outline-danger btn-sm"><i class="material-icons"> remove_circle</i></a> -->
+                <a href="{% url 'ingles:saleF' grupo.grupos.idgrupo %}"><i class="fa-solid fa-file-pdf"
+                    style="font-size:20px;color:red;"></i></a>
+                    <a href="{% url 'ingles:saleP' grupo.grupos.idgrupo %}"><i class="fa-solid fa-file-pdf"
+                      style="font-size:20px;color:grey;"></i></a>
+                <a href="{% url 'ingles:Excel' grupo.grupos.idgrupo %}"><i class="fa-sharp fa-solid fa-table"
+                    style="font-size:20px;color:green;"></i></a>
+                <a onclick="abrir_modal_ediciong('{% url 'ingles:editar_grupos' grupo.grupos.idgrupo %}')"><i
+                    class="fa-solid fa-circle-up" style="font-size:20px;color:orangered;"></i></a>
+                    <!-- estadisticas -->
+                <a href="{% url 'ingles:estadisticas' grupo.grupos.idgrupo  %}"><i
+                    class="fas fa-chart-bar fa-rotate-270" style="font-size: 20px; color: rgb(0, 119, 255)"></i></a>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+
+            <!--  Page content-->
+          </table>
+          {% else %}
+          <h1>No Existen Grupos Registrados</h1>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </div>
 {% endif %}
 <div class="modal fade" id="creaciong" role="dialog">
@@ -76,7 +127,7 @@
 </div>
 
 
-{% block extrajs %}
+{% block javascripts %}
 <script type="text/javascript">
   var $ = jQuery.noConflict();
   function abrir_modal_ediciong(url) {
@@ -90,5 +141,16 @@
     });
   } 
 </script>
-{% endblock extrajs %}
+
+<script type="application/javascript">
+  $(document).ready(function () {
+    $('#data').DataTable({
+      "language": {
+        url: "{% static 'lib/spanish.txt' %}"
+      },
+
+    });
+  });
+</script>
+{% endblock javascripts %}
 {% endblock content %}

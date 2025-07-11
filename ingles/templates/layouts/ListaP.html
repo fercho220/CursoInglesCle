@@ -1,0 +1,135 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF</title>
+    <link rel="stylesheet" href="/static/lib/bootstrap-5.2.2/css/bootstrap.min.css">
+    <style>
+        * {
+            font-family: 'Times New Roman', Times, serif
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+
+        }
+
+        th {
+            text-align: center;
+            font-size: 14px;
+        }
+
+        td {
+            font-size: 13px;
+        }
+
+        p {
+            font-size: 15px;
+            padding: 0%;
+            margin: 0%;
+        }
+
+        .img-logo {
+
+            width: 280px;
+            height: 65px;
+            margin-bottom: 10px;
+        }
+
+        .img-logo2 {
+            margin-top: 10px;
+            width: 230px;
+            height: 58px;
+            margin-bottom: 10px;
+        }
+
+        .img-gen {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .img-gen2 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="img-gen2">
+        <div>
+            <img src="{% static 'img/SEPE.jpg' %}" class="img-fluid d-block mx-auto img-logo">
+        </div>
+        <div>
+            <img src="{% static 'img/TecNMHorizontal1.png' %}" class="img-fluid d-block mx-auto img-logo2">
+        </div>
+    </section>
+    <div>
+        <h2 class="text-center"><b>Tecnológico Nacional de México, Campus Acapulco</b> <br></h2>
+        <h4 class="text-center"><b>COORDINACIÓN DE LENGUAS EXTRANJERAS</b> <br> <br></h4>
+        <h4 class="text-left"><b>LISTA DE ESTUDIANTES PENDIENTES :(</b> <br></h4>
+    </div>
+    <br>
+    <table style="width:100%">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>No. CONTROL</th>
+                <th>NOMBRE DEL ESTUDIANTE</th>
+                <th>CARRERA</th>
+                <th>OBSERVACIONES</th>
+            </tr>
+            <!-- font-size 12px; -->
+            {% for grupodetalle in sale %}
+            {%if forloop.first%}
+            <div class="img-gen">
+                <p><b>FACILITADOR:</b> {{ grupodetalle.idgrupo.iddocente | upper}}</p>
+                </p>
+                <p><b>MODALIDAD:</b> {{ grupodetalle.idgrupo.idmodalidad | upper}} </p>
+            </div>
+            <div class="img-gen">
+                <p><b>PERIODO:</b> {{grupodetalle.idperiodo | upper}}</p>
+                <p><b>GRUPO:</b> {{ grupodetalle.idgrupo.grupo}} </p>
+                <p><b>NIVEL:</b> {{grupodetalle.foliopago.idmateria}}</p>
+            </div>
+            <div class="img-gen">
+                <p><b>AULA:</b> {{ grupodetalle.idgrupo.idaula}} </p>
+                <p><b>HORARIO:</b> {{ grupodetalle.idgrupo.horario}} </p>
+                <p><b>TOTAL DE ALUMNOS:</b> {{comp}}</p>
+            </div>
+            <br>
+        </thead>
+        <tbody>
+            {%endif%}
+            {% if grupodetalle.foliopago.idestado.estado == 'Pendiente' %}
+            <tr>
+                <td style="text-align: center;">{{forloop.counter}}</td>
+                <td style="text-align: center;">{{ grupodetalle.idestudiante.nocontrol}}</td>
+                <td style="padding: 0px 0px 0px 5px;">{{ grupodetalle.idestudiante | title}}</td>
+                <td style="text-align: center;">{{ grupodetalle.idestudiante.idcarrera }}</td>
+                <td> </td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <script src="/static/lib/bootstrap-5.2.2/js/bootstrap.js"></script>
+    <script src="/static/lib/bootstrap-5.2.2/js/"></script>
+    <script src="/static/js/jquery-3.5.1.slim.min.js"></script>
+</body>
+
+</html>

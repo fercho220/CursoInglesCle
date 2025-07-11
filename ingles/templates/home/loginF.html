@@ -1,0 +1,96 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Login {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-5">
+    <div class="card">
+      <div class="card-header card-header-primary">
+        <h4 class="card-title">
+          Iniciar Sesión | Facilitadores
+        </h4>
+      </div>
+      <div class="card-body">
+
+        <h6 class="card-category">
+          Agrega tus Credenciales
+        </h6>
+
+        <br />
+
+        <form role="form" method="post">
+          {% csrf_token %}
+          {% if request.method == 'POST' %}
+          {% if form.error_messages %}
+          <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>Advertencia: </strong> {{ form.get_invalid_login_error }}
+          </div>
+          {% endif %}
+          {% endif %}
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="bmd-label-floating">RFC</label>
+                {{ form.username }}
+              </div>
+            </div>
+          </div>
+
+          <br />
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="bmd-label-floating">Contraseña</label>
+                {{ form.password }}
+              </div>
+            </div>
+          </div>
+
+          <br />
+
+          <button type="submit" name="login" class="btn btn-primary pull-left">Entrar</button>
+          &nbsp; &nbsp;
+          <span class="pull-right">
+            <a href="{% url 'password_reset' %}" class="text-primary">
+              <h5 style="color: rgb(255, 0, 0);">¿Olvidaste tu contraseña?</h5>
+            </a>
+          </span>
+          <br>
+          <br>
+          <span class="pull-right">
+            <a href="{% url 'login' %}" class="text-primary">
+              <h6>¿Eres Estudiante?</h6>
+            </a>
+          </span>
+          <!-- <span class="pull-right">
+            <b>Estudiante</b> <a href="{% url 'login' %}" class="text-primary"> -->
+          <!-- <h7> <b>Registrate!</b> </h7>
+            </a>
+          </span>
+          <span class="pull-right">
+            <a href="{% url 'password_reset' %}" class="text-primary">
+              <h6>¿Olvidaste tu contraseña?</h6>
+            </a>
+          </span> -->
+
+          <div class="clearfix"></div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

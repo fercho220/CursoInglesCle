@@ -1,0 +1,138 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  th {
+    text-align: center;
+    font-size: 14px;
+  }
+
+  td {
+    font-size: 15px;
+  }
+
+  p {
+    font-size: 18px;
+    padding: 5px;
+    margin: 0%;
+  }
+</style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+<!-- {% if request.user.is_superuser %}
+<div>
+  <button class="btn btn-outline-primary btn-sm" type="button"
+    onclick="abrir_modal_creaciong('{% url 'curso:crear_grupos' %}')">Agregar Grupo</button>
+</div>
+{% endif %} -->
+<div class="table-responsive">
+  {% if var %}
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          <h4 class="card-title ">Docentes</h4>
+        </div>
+        <div class="card-body">
+          <table class="table table-responsive" id="data">
+            <thead class=" text-primary">
+              <th style="width:5%">#</th>
+              <th style="width:10%">Nombre</th>
+              <th style="width:15%">Apellido Paterno</th>
+              <th style="width:15%">Apellido Materno</th>
+                <th style="width:20%">Correo</th>
+              <th>Grupos activos</th>
+              <th>Grupos impartidos</th>
+              <th style="width:12%">Opciones</th>
+              {% for docente in var %}
+              {%if forloop.first%}
+              <!-- <h3>Periodo: {{ grupo.idperiodo}}</h3> -->
+            </thead>
+            <tbody>
+              {%endif%}
+              <tr>
+                <td>{{ forloop.counter}}</td>
+                <td>{{ docente.docentes.nombre}}</td>
+                <td>{{ docente.docentes.apellidop}}</td>
+                <td>{{ docente.docentes.apellidom}}</td>
+                {%if docente.docentes.email%}
+                <td>{{ docente.docentes.email }}</td>
+                {%else%}
+                <td>Sin correo</td>
+                {%endif%}
+                <td>{{ docente.gruposA }}</td>
+                <td>{{ docente.grupos }}</td>
+                <td>
+                  <a href="{% url 'ingles:listar_gr_docente' docente.docentes.iddocente %}"><i class="fa-solid fa-eye"
+                    style="font-size:20px;color:rgb(1, 95, 202);"></i></a>
+                {% if request.user.is_superuser %}
+
+                <a href="/admin/ingles/docente/{{docente.docentes.iddocente}}/change/"><i
+                    class="fa-solid fa-pencil" style="font-size:20px;color:rgb(243, 150, 0);"></i></a>
+
+                <a href="{% url 'ingles:eliminar_docentes' docente.docentes.iddocente %}"><i
+                      class="fa-solid fa-circle-xmark" style="font-size:20px;color:rgb(243, 0, 0);"></i></a>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+
+            <!--  Page content-->
+          </table>
+          {% else %}
+          <h1>No Existen Grupos Registrados</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+<div class="modal fade" id="creaciong" role="dialog">
+
+</div>
+
+<div class="modal fade" id="ediciong" role="dialog">
+
+</div>
+
+
+{% block javascripts %}
+<script type="text/javascript">
+  var $ = jQuery.noConflict();
+  function abrir_modal_ediciong(url) {
+    $('#ediciong').load(url, function () {
+      $(this).modal('show');
+    });
+  }
+  function abrir_modal_creaciong(url) {
+    $('#creaciong').load(url, function () {
+      $(this).modal('show');
+    });
+  } 
+</script>
+
+<script type="application/javascript">
+  $(document).ready(function () {
+    $('#data').DataTable({
+      "language": {
+        url: "{% static 'lib/spanish.txt' %}"
+      },
+
+    });
+  });
+</script>
+{% endblock javascripts %}
+{% endblock content %}

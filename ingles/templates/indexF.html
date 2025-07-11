@@ -1,0 +1,17 @@
+{% extends "layouts/base-f.html" %}
+{% block extra_css %}
+{% endblock extra_css %}
+
+<!-- Page content-->
+{% block content %}
+<div class="container2">
+    <div class="text-center mt-5">
+        <h2>Bienvenido(a)</h2>
+        <!-- <h3>{{ user.username | upper }}</h3> -->
+        <h3>{{ user.docente.nombre | upper }} {{ user.docente.apellidop | upper }} {{ user.docente.apellidom| upper}}
+        </h3>
+        <!-- <p class="lead">Revisa tu Perfil y Confirma tus Datos.</p> -->
+        <p class="lead">Estas en Facilitador.</p>
+    </div>
+</div>
+{% endblock content %}

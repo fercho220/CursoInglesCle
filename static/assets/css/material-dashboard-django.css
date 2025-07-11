@@ -97,6 +97,12 @@ abbr[data-original-title] {
     border-bottom: 0;
 }
 
+#Cor {
+    color: #28166F;
+    font-size: 110%;
+    font-weight: bold;
+}
+
 address {
     margin-bottom: 1rem;
     font-style: normal;
@@ -9514,7 +9520,7 @@ a.text-dark:focus {
 }
 
 .open>.btn.btn-primary.dropdown-toggle.bmd-btn-icon:hover {
-    background-color:#2747b0;
+    background-color: #2747b0;
 }
 
 .btn.btn-primary.disabled:focus,
@@ -14421,8 +14427,8 @@ h6,
     color: #3C4858;
     text-decoration: none;
 }
-side
-.card-blog .card-title {
+
+side .card-blog .card-title {
     font-weight: 700;
 }
 
@@ -18566,15 +18572,23 @@ label {
 }
 
 @media all and (max-width: 991px) {
-    [class*="navbar-expand-"]>.container-fluid>.navbar-wrapperLI{
+    [class*="navbar-expand-"]>.container-fluid>.navbar-wrapperLI {
         display: none;
     }
 }
+
+@media all and (max-width: 820px) {
+    [class*="navbar-expand-"]>.container-fluid>.navbar-wrapperLT {
+        display: none;
+    }
+}
+
 @media all and (max-width: 652px) {
-    [class*="navbar-expand-"]>.container-fluid>.navbar-wrapperLT{
+    [class*="navbar-expand-"]>.container-fluid>.navbar-wrapperLS {
         display: none;
     }
 }
+
 @media all and (max-width: 991px) {
 
     [class*="navbar-expand-"]>.container,
@@ -18582,6 +18596,7 @@ label {
         padding-left: 15px;
         padding-right: 15px;
     }
+
     .navbar .navbar-collapse .navbar-nav>li.button-container {
         padding: 15px;
     }

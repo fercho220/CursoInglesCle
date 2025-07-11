@@ -1,0 +1,59 @@
+
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title"> <b>Actualizar Datos</b> </h3>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span
+                    aria-hidden="true">&times;</span></button>
+        </div>
+        <form action="{% url 'curso:editar_facilitador' object.iddocente%}" method="POST"
+            enctype='multipart/form-data'>
+            {% csrf_token %}
+            <div class="modal-body">
+                <!-- {{ form.as_p }} -->
+                <div style="flex-direction: column;">
+                    <div class="form-group">
+                        <label class="bmd-label-floating" autocomplete="off">Nombre del Facilitador</label>
+                        {{ form.nombre }}
+                    </div>
+                    <span class="text-danger">{{ form.nombre.errors }}</span>
+
+                    <div class="form-group">
+                        <label class="bmd-label-floating" autocomplete="off">Apellido Paterno</label>
+                        {{ form.apellidop }}
+                    </div>
+                    <span class="text-danger">{{ form.apellidop.errors }}</span>
+
+                    <div class="form-group">
+                        <label class="bmd-label-floating" autocomplete="off">Apellido Materno</label>
+                        {{ form.apellidom }}
+                    </div>
+                    <span class="text-danger">{{ form.apellidom.errors }}</span>
+
+                    <div class="form-group">
+                        <label class="bmd-label-floating" autocomplete="off">RFC</label>
+                        {{ form.rfc }}
+                    </div>
+                    <span class="text-danger">{{ form.rfc.errors }}</span>
+
+                    <div class="form-group">
+                        <label class="bmd-label-floating" autocomplete="off">Cédula profesional</label>
+                        {{ form.ced }}
+                    </div>
+                    <span class="text-danger">{{ form.ced.errors }}</span>
+
+                    <div class="form-group">
+                        <label class="bmd-label-floating" autocomplete="off">Correo electrónico</label>
+                        {{ form.email }}
+                    </div>
+                    <span class="text-danger">{{ form.email.errors }}</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-outline-primary">Confirmar</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,16 +1,63 @@
 {% extends "layouts/base.html" %}
+    {% load static %}
     {% block extra_css %}
     {% endblock extra_css %}
         
         <!-- Page content-->
         {% block content %}
-        <div class="container2">
-            <div class="text-center mt-5">
-                <h2>Bienvenido(a)</h2>
-                <h3>{{estudiante.nocontrol}}</h3>
-                <!-- <h3>{{ user.username | upper }}</h3>-->
-                <h3>{{ estudiante.nombre | upper }} {{ estudiante.apellidop | upper }} {{ estudiante.apellidom  | upper }}</h3>
-                <p class="lead">Revisa tu Perfil y Confirma tus Datos.</p>
+        <div style="width: 100%; background-color: rgb(33, 0, 63); border-top-left-radius:10px; border-top-right-radius: 10px; margin-top: -20px;">
+            {% if request.user.is_superuser %}
+            <div class="container2">
+                <div class="text-center mt-5">
+                    <h2 style="color: rgb(255, 255, 255);">{{ user.username | upper }} | Administración</h2>
+                </div>
             </div>
+            {% else %}
+            <div class="container2">
+                <div class="text-center mt-5">
+                    <h3 style="color: rgb(255, 255, 255); padding: 5px;">Bienvenido(a) | {{ user.estudiante.nombre | upper }} {{ user.estudiante.apellidop | upper }} {{ user.estudiante.apellidom  | upper }} </h3>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div style="width: 100%; height: 300px;">
+        <img style="object-fit: cover;width: 100%; height: 100%; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;" src="{% static 'img/main.JPG' %}">
+        </div>
+        <div style="width: 100%; background-color: rgb(240, 240, 240);padding: 10px; margin-top: 10px; border-radius: 10px; border: solid 2px; border-color: rgb(198, 198, 198);">
+            <h5>Después de cumplir con todos los requisitos que exige el TecNM, la Coordinación de Lenguas Extranjeras (CLE) del TecNM campus Acapulco obtiene la clave de registro. Esta clave otorgada por el TecNM certifica que:</h5>
+            <p>a) La CLE cumple con los estándares de calidad en la enseñanza de una lengua extranjera.
+            <br>b) Que todo alumno que acredite sus 450 hrs. ( 5 niveles) obtiene su constancia de liberación de inglés.
+            <br>c) Dicha constancia al ser expedida por una CLE certificada tiene valor en cualquier instituto perteneciente al TecNM.
+            <br>d) Las bondades de esta clave quedan establecidas como parte del TecNM campus Acapulco.</p>
+        </div>
+
+        <div style="width: 100%; background-color: rgb(75, 1, 58); border-top-left-radius:10px; border-top-right-radius: 10px; margin-top: -30px;">
+            <div class="container2">
+                <div class="text-center mt-5">
+                    <h2 style="color: rgb(255, 255, 255);">Comunicación</h2>
+                </div>
+            </div>
+        </div>
+        <div style="width: 100%; overflow-y: scroll;background-color: rgb(255, 255, 255); border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; border: solid 2px; border-color: rgb(206, 206, 206);">
+        <center>
+            <table style="width: 100%;">
+                <tr>
+                    <td style="width: 33%; text-align: center;">
+            <div id="fb-root"></div>
+            <script async defer crossorigin="anonymous" src="https://connect.facebook.net/es_ES/sdk.js#xfbml=1&version=v19.0" nonce="5LX99lEE"></script>
+            <div class="fb-page" data-href="https://www.facebook.com/TecNMAcapulco" data-tabs="timeline" data-width="430" data-height="600" data-small-header="false" data-adapt-container-width="false" data-hide-cover="false" data-show-facepile="false"><blockquote cite="https://www.facebook.com/TecNMAcapulco" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/TecNMAcapulco">TecNM Campus Acapulco</a></blockquote></div>
+                    </td>
+            <!--Cambiar temporales-->
+            <td style="width: 33%; text-align: center;">
+            <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2FTecNMAcapulco%2Fposts%2Fpfbid02PmakLN3yjaJBRf7YNd1ur4cKVA5TxrEu6myBCwpTxkeKgZX8EKVYrJqPDwhWLSoHl&show_text=true&width=430" width="430" height="600" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+            </td>
+            <td style="width: 33%; text-align: center;">
+                <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2FTecNMAcapulco%2Fposts%2Fpfbid0cxJLcUuRW3Dg625Y3tGSEEKMd3sKJe6AxuzFko9dRL3vn5oWmR9Zhea9WxqV5ReMl&show_text=true&width=430&preview=comet_preview" width="430" height="600" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+            </td>    
+            </tr>
+            </table>
+            <!--Fin Cambiar temporales-->
+        
+        </center>
         </div>
         {% endblock content %}

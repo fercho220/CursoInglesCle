@@ -6,8 +6,35 @@
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
+
+
+
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% if request.user.estudiante.cursando == 0 %}
 <button class="btn btn-outline-primary" type="button"
   onclick="abrir_modal_creacion('{% url 'curso:crear_pago'%}')">Agregar Pago</button>
+  <br>
+  <a href="{% url 'curso:crear_pago2' %}" target="_blank" style="font-size: 0.8em;">Abrir formulario en otra página</a>
+  <br>
+    <div style="padding:5px; margin-top: 10px; color:brown; border: solid 1px; border-radius: 2px; display: inline-block; background-color: rgb(255, 255, 255); border-color: rgb(22, 37, 82);">
+    <h4 style="font-size: 14px;">📢 *Atención*: sé cuidadoso y asegúrate que los datos sean correctos, después del registro, no podrás editar los datos del curso. El pago debe estar sellado por el Departamento de Recursos Financieros.</h4>
+  </div>
+  {%else%}
+  <div style="padding:5px; margin-top: 10px; color:rgb(46, 144, 78); border: solid 1px; border-radius: 2px; display: inline-block; background-color: rgb(255, 255, 255); border-color: rgb(22, 37, 82);">
+  <h4 style="font-size: 14px;">📢 Parece que ya estás inscrito a un nivel, si esto no es así, comunicate con Coordinación de Lenguas Extranjeras.</h4>
+  </div>
+{% endif %}
 <div class="table-responsive">
   {% if pagos %}
   <div class="row">
@@ -17,14 +44,15 @@
           <h4 class="card-title ">Lista de Pagos</h4>
         </div>
         <div class="card-body">
-          <table class="table">
+          <table class="table table-responsive">
             <thead class=" text-primary">
               <th>#</th>
               <th>Materia</th>
-              <th>Estudiante</th>
               <th>Periodo</th>
               <th>Fecha del Pago</th>
-              <th>Fecha de Alta</th>
+              <th>Grupo</th>
+              <th>Estado</th>
+              <th>Descripción</th>
               {% if request.user.is_superuser %}
               <th>Opciones</th>
               {% endif %}
@@ -32,16 +60,19 @@
             <tbody>
               {% for pago in pagos %}
               <tr>
-                <td>{{ pago.foliopago }}</td>
+                <td>{{ forloop.counter}}</td>
                 <td>{{ pago.idmateria }}</td>
-                <td>{{ pago.idestudiante }}</td>
                 <td>{{ pago.idperiodo }}</td>
                 <td>{{ pago.fechapago }}</td>
-                <td>{{ pago.fechasist }}</td>
+                <td>{{ pago.idgrupo }}</td>
+                <td>{{ pago.idestado }}</td>
+                <td>{{ pago.descripcion }}</td>
                 <td>
-                  {% if request.user.is_superuser %}
                   <button onclick="abrir_modal_edicion('{% url 'ingles:editar_pago' pago.foliopago %}')"
                     class="btn btn-outline-secondary">Editar</button>
+                    <br>
+                    <center><a href="{% url 'ingles:editar_pagoIPhone' pago.foliopago %}" target="_blank" style="font-size: 0.8em;">Abrir en otra página</a></center>
+                  {% if request.user.is_superuser %}
                   <a href="{% url 'ingles:eliminar_pago' pago.foliopago %}" class="btn btn-outline-danger">Eliminar</a>
                   {% endif %}
                 </td>
@@ -56,13 +87,20 @@
     </div>
   </div>
 </div>
+
 {% endif %}
-<div class="modal fade" id="creacion" role="dialog">
+<div class="modal fade" id="creacion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+  role="dialog">
 
 </div>
-
-<div class="modal fade" id="edicion" role="dialog">
-
+<div class="modal fade" id="edicion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog">
+  <script>
+  
+    // Mostrar alerta al cargar la página
+    window.onload = function() {
+      alert('Sí tienes problemas al abrir "Agregar pago", prueba con el enlace que está debajo de este.');
+    }
+  </script>
 </div>
 {% block extrajs %}
 <script type="text/javascript">
@@ -75,7 +113,8 @@
     $('#creacion').load(url, function () {
       $(this).modal('show');
     });
-  } 
+  }
+  $('#myModal').modal(options)
 </script>
 {% endblock extrajs %}
 {% endblock content %}

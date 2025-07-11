@@ -8,10 +8,12 @@ from django.views.generic.edit import FormView
 from django.contrib.auth import login, logout
 from .forms import FormularioLogin
 # Create your views here.
+
+# incio de sesion del Facilitadores
 class Login(FormView):
-    template_name = 'login.html'
+    template_name = 'home/loginF.html'
     form_class = FormularioLogin
-    success_url = reverse_lazy('curso:index')
+    success_url = reverse_lazy('curso:index2')
 
     @method_decorator(csrf_protect)
     @method_decorator(never_cache)
@@ -24,7 +26,9 @@ class Login(FormView):
     def form_valid(self, form):
         login(self.request,form.get_user())
         return super(Login,self).form_valid(form)
-        
+
+
+# incio de sesion del Estudiante     
 class Login2(FormView):
     template_name = 'home/login.html'
     form_class = FormularioLogin
@@ -46,3 +50,6 @@ def logoutUsuario(request):
     logout(request)
     return HttpResponseRedirect('/accounts/login/')   
 
+def logoutUsuarioF(request):
+    logout(request)
+    return HttpResponseRedirect('/accounts/login1/')    

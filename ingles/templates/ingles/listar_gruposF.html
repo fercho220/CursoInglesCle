@@ -1,0 +1,99 @@
+{% extends "layouts/base-f.html" %}
+{% load static %}
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<div class="table-responsive">
+  {% if var %}
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          <h4 class="card-title ">Grupos</h4>
+        </div>
+        <div class="card-body">
+          <table class="table table-responsive" id="data">
+            <thead class=" text-primary">
+              <th style="width:5%">#</th>
+              <th style="width:10%">Periodo</th>
+              <th style="width:10%">Curso</th>
+              <th style="width:10%">Docente</th>
+              <th style="width:10%">Aula</th>
+              <th style="width:15%">Modalidad</th>
+              <th style="width:10%">Horario</th>
+              <th style="width:8%">Est.</th>
+              <th>Opciones</th>
+              {% for grupo in var %}
+              {%if forloop.first%}
+
+            </thead>
+            <tbody>
+              {%endif%}
+              <tr>
+                <td>{{ forloop.counter}}</td>
+                <td>{{ grupo.grupos.idperiodo}}</td>
+                <td>{{ grupo.grupos.idmateria}}</td>
+                <td>{{ grupo.grupos.iddocente }}</td>
+                <td>{{ grupo.grupos.idaula }}</td>
+                <td>{{ grupo.grupos.idmodalidad }}</td>
+                <td>{{ grupo.grupos.horario }}</td>
+                <td>{{ grupo.counter }}</td>
+                <td>
+                  <!-- <a href="{% url 'ingles:listar_gruposdetalles' grupo.grupos.idgrupo %}"
+                    class="btn btn-outline-info btn-sm"><i class="material-icons"> visibility</i></a> -->
+                  <a href="{% url 'ingles:saleF' grupo.grupos.idgrupo %}" class="btn btn-outline-danger btn-sm"><i
+                      class="material-icons"> picture_as_pdf</i></a>
+                  <!-- <a href="{% url 'ingles:Excel' grupo.grupos.idgrupo %}" class="btn btn-outline-success btn-sm"><i
+                      class="material-icons"> explicit</i></a> -->
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <h1>No Existen Grupos Registrados</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+<div class="modal fade" id="creaciong" role="dialog">
+
+</div>
+
+<div class="modal fade" id="ediciong" role="dialog">
+
+</div>
+
+
+{% block javascripts %}
+<script type="text/javascript">
+  var $ = jQuery.noConflict();
+  function abrir_modal_ediciong(url) {
+    $('#ediciong').load(url, function () {
+      $(this).modal('show');
+    });
+  }
+  function abrir_modal_creaciong(url) {
+    $('#creaciong').load(url, function () {
+      $(this).modal('show');
+    });
+  } 
+</script>
+
+<script type="application/javascript">
+  $(document).ready(function () {
+    $('#data').DataTable({
+      "language": {
+        url: "{% static 'lib/spanish.txt' %}"
+      },
+
+    });
+  });
+</script>
+{% endblock javascripts %}
+{% endblock content %}

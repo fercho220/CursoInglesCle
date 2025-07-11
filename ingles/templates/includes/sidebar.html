@@ -8,45 +8,104 @@
     <ul class="nav">
       {% if request.user.is_authenticated %}
 
+      {% if request.user.username == "Financieros" %}
       <li class="nav-item {% if 'index' in segment %} active {% endif %}">
         <a class="nav-link" href="/">
-          <i class="material-icons">dashboard</i>
-          <p>Inicio</p>
+          <i style="color: rgb(101, 101, 101);"class="material-icons">dashboard</i>
+          <p>Avisos</p>
         </a>
       </li>
-      <li class="nav-item {% if 'page-user' in segment %} active {% endif %}">
-        <a class="nav-link" href="{% url 'curso:listar_perfil' %}">
-          <i class="material-icons">person</i>
-          <p>Perfil</p>
-        </a>
-      </li>
+
       <li class="nav-item {% if 'ui-tables' in segment %} active {% endif %}">
-        <a class="nav-link" href="{% url 'curso:listar_pagoE' %}">
-          <i class="material-icons">content_paste</i>
+        <a class="nav-link" href="{% url 'curso:listar_financiero' 'default' %}">
+          <i class="material-icons">paid</i>
           <p>Pagos</p>
         </a>
       </li>
+
+      <li class="nav-item {% if 'ui-maps' in segment %} active {% endif %}">
+        <a class="nav-link" href="/admin/">
+          <i style="color: rgb(101, 101, 101);"class="material-icons">settings</i>
+          <p>Control</p>
+        </a>
+      </li>
+
+
+      {% else %}
+
+      <li class="nav-item {% if 'index' in segment %} active {% endif %}">
+        <a class="nav-link" href="/">
+          <i style="color: rgb(101, 101, 101);"class="material-icons">dashboard</i>
+          <p>Avisos</p>
+        </a>
+      </li>
+      {% if request.user.is_superuser %}
+      <li class="nav-item {% if 'page-user' in segment %} active {% endif %}">
+        <a class="nav-link" href="{% url 'curso:listar_alumnos' %}">
+          <i style="color: rgb(101, 101, 101);"class="material-icons">person</i>
+          <p>Estudiantes</p>
+        </a>
+      </li>
+      <li class="nav-item {% if 'ui-icons' in segment %} active {% endif %}">
+        <a class="nav-link" href="{% url 'curso:listar_docentes' %}">
+          <i style="color: rgb(101, 101, 101);"class="material-icons">bubble_chart</i>
+          <p>Docentes</p>
+        </a>
+      </li>
+      {% else %}
+      <li class="nav-item {% if 'page-user' in segment %} active {% endif %}">
+        <a class="nav-link" href="{% url 'curso:listar_perfil' %}">
+          <i style="color: rgb(101, 101, 101);"class="material-icons">person</i>
+          <p>Perfil</p>
+        </a>
+      </li>
+      {% endif %}
+      {% if request.user.is_superuser %}
+      <li class="nav-item {% if 'ui-tables' in segment %} active {% endif %}">
+        <a class="nav-link" href="{% url 'curso:listar_financiero' 'default' %}">
+          <i style="color: rgb(101, 101, 101);" class="material-icons">paid</i>
+          <p>Pagos</p>
+        </a>
+      </li>
+      {% else %}
+      <li class="nav-item {% if 'ui-tables' in segment %} active {% endif %}">
+        <a class="nav-link" href="{% url 'curso:listar_pagoE' %}">
+          <i style="color: rgb(101, 101, 101);"class="material-icons">paid</i>
+          <p>Tus pagos</p>
+        </a>
+      </li>
+      {% endif %}
       <li class="nav-item {% if 'ui-typography' in segment %} active {% endif %}">
         <a class="nav-link" href="{% url 'curso:listar_grupos' %}">
-          <i class="material-icons">library_books</i>
+          <i style="color: rgb(101, 101, 101);"class="material-icons">library_books</i>
           <p>Grupos</p>
         </a>
       </li>
 
       {% if request.user.is_superuser %}
-      <li class="nav-item {% if 'ui-icons' in segment %} active {% endif %}">
-        <a class="nav-link" href="http://127.0.0.1:8000/admin/ingles/docente/">
-          <i class="material-icons">bubble_chart</i>
-          <p>Docentes</p>
+      {% if request.user.username == "Coordinador" %}
+      <li class="nav-item {% if 'ui-tables' in segment %} active {% endif %}">
+        <a class="nav-link" href="{% url 'curso:calificar_admin' %}">
+          <i style="color: rgb(101, 101, 101);" class="material-icons">content_paste</i>
+          <p>Calificar</p>
         </a>
       </li>
+      {% endif %}
 
       <li class="nav-item {% if 'ui-maps' in segment %} active {% endif %}">
-            <a class="nav-link" href="http://127.0.0.1:8000/admin/ingles/grupo/">
-              <i class="material-icons">language</i>
-              <p>Grupo</p>
+        <a class="nav-link" href="{% url 'ingles:estadisticas_Global' 'all'  %}">
+          <i style="color: rgb(101, 101, 101);"class="material-icons">analytics</i>
+          <p>Estadísticas</p>
+        </a>
+      </li>
+      <li class="nav-item {% if 'ui-maps' in segment %} active {% endif %}">
+            <a class="nav-link" href="/admin/">
+              <i style="color: rgb(101, 101, 101);"class="material-icons">settings</i>
+              <p>Control</p>
             </a>
           </li>
+      
+      {% endif %}
       {% endif %}
 
       <!-- <li class="nav-item {% if 'ui-notifications' in segment %} active {% endif %}">
@@ -65,8 +124,8 @@
 
       <li class="nav-item ">
             <a class="nav-link" href="{% url 'logout' %}" >
-              <i class="material-icons">directions_run</i>
-              <p>Logout</p>
+              <i style="color: rgb(101, 101, 101);"class="material-icons">directions_run</i>
+              <p>Salir</p>
             </a>
           </li>
 
@@ -81,5 +140,4 @@
       {% endif %}
     </ul>
   </div>
-
 </div>

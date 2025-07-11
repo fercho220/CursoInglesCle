@@ -5478,20 +5478,23 @@ textarea.form-control-lg {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1055;
+  z-index: 99;
   display: none;
   width: 100%;
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+  overflow: visible;
+  -webkit-overflow-scrolling: auto !important;
   outline: 0;
 }
 
 .modal-dialog {
-  position: relative;
+  position: absolute;
   width: auto;
   margin: 0.5rem;
   pointer-events: none;
+  z-index: 99;
 }
 .modal.fade .modal-dialog {
   transition: transform 0.3s ease-out;
@@ -5543,7 +5546,7 @@ textarea.form-control-lg {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1050;
+  z-index: 90;
   width: 100vw;
   height: 100vh;
   background-color: #000;
@@ -5611,13 +5614,13 @@ textarea.form-control-lg {
   }
 
   .modal-sm {
-    max-width: 300px;
+    max-width: 250px;
   }
 }
 @media (min-width: 992px) {
   .modal-lg,
 .modal-xl {
-    max-width: 800px;
+    max-width: auto;
   }
 }
 @media (min-width: 1200px) {
@@ -5758,7 +5761,7 @@ textarea.form-control-lg {
 }
 .tooltip {
   position: absolute;
-  z-index: 1080;
+  z-index: 1;
   display: block;
   margin: 0;
   font-family: var(--bs-font-sans-serif);

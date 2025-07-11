@@ -1,0 +1,438 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  th {
+    text-align: center;
+    font-size: 14px;
+  }
+
+  td {
+    font-size: 15px;
+  }
+
+  p {
+    font-size: 18px;
+    padding: 5px;
+    margin: 0%;
+  }
+
+  #loading-message {
+    position: fixed;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 5px;
+    font-size: 18px;
+    z-index: 1000;
+    display: none; /* Ocultar inicialmente */
+  }
+  #loading-message p {
+    font-size: 15px;
+  }
+
+  #messages-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Asegura que esté sobre otros elementos */
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo semi-transparente opcional */
+  }
+
+  .messages {
+    margin: 0 auto;
+    max-width: 1200px; /* Ajusta esto según tus necesidades */
+    padding: 10px;
+  }
+
+  .alert {
+    margin-bottom: 10px;
+  }
+
+</style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+</head>
+
+<div id="messages-container">
+  {% include 'ingles/message.html' %}
+</div>
+    
+<!-- Contenedor del mensaje de carga -->
+<div id="loading-message">
+  Cargando registros...
+  <p>Esto puede demorar unos segundos</p>
+</div>
+{% if request.user.username == "Financieros" or request.user.is_superuser%}
+<div class="table-responsive" style="overflow: hidden;">
+  <div class="row">
+    <div class="col-md-12">
+      <div style="display: flex; align-items: flex-end; gap: 10px;">
+        <div>
+          <label for="periodoSelect" style="font-size: 13px; display: block;  color: rgb(43, 43, 43);">Período</label>
+          <select id="periodoSelect" style="background-color:white; border-radius: 2px; border: solid 1px; padding: 12px; font-size: 11px;">
+            <option value="all">Todos</option>
+            {% for periodo in periodos %}
+              <option value="{{ periodo.idperiodo }}">{{ periodo.periodo }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      
+        <div>
+          <label for="estadoSelect" style="font-size: 13px; display: block; color: rgb(43, 43, 43);">Estado</label>
+          <select id="estadoSelect" style="background-color:white; border-radius: 2px; margin-right: 4px; border: solid 1px; padding: 12px; font-size: 11px;">
+            <option value="all">Todos</option>
+            <option value="1">➖ Pendiente</option>
+            <option value="2">✅ Aceptado</option>
+            <option value="4">⛔ No aceptado</option>
+          </select>
+        </div>
+      
+        <div>
+          <button onclick="filtrarTabla()" class="btn btn-primary load-link" style="padding: 11px; font-size: 11px;">Filtrar</button>
+        </div>
+        <div>
+          <button onclick="exportToExcel()" class="btn btn-success" style="padding: 11px; font-size: 11px;">
+            <i class="fa fa-file-excel" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div>
+          <button onclick="exportToPDF()" class="btn btn-danger" style="padding: 11px; font-size: 11px;">
+            <i class="fa fa-file-pdf" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>    
+            
+      <div class="card">
+        <div class="card-header card-header-primary">
+          {%if pagos%}
+          {% for pago in pagos %}
+          {%if forloop.first%}
+          <h4 class="card-title ">{{ titulo }}</h4>
+          {% endif %}
+          {% endfor %}
+          {% else %}
+          <h4 class="card-title ">No existen registros de pagos</h4>
+          {% endif %}
+        </div>
+        <div class="card-body">
+          
+          <table class="table table-responsive" id="data">
+            <thead class=" text-primary">
+              <th style="width:3%">#</th>
+              <th style="width:10%">Fecha</th>
+              <th style="width:3%">Monto</th>
+              <th style="width:10%">Estudiante</th>
+              <th style="width:5%">No. Control</th>
+              <th style="width:10%">Periodo</th>
+              <th style="width:5%">Nivel</th>
+              <th style="width:6%">Estado</th>
+              <th style="width:5%">Opciones</th>
+              {% for pago in pagos %}
+              {%if forloop.first%}
+              <!-- <h3>Periodo: {{ grupo.idperiodo}}</h3> -->
+            </thead>
+            <tbody>
+              {%endif%}
+              <tr>
+                <td>{{ forloop.counter}}</td>
+                <td>{{ pago.fechapago}}</td>
+                <td>{{ pago.monto }}</td>
+                <td>{{ pago.idestudiante.nombre }} {{ pago.idestudiante.apellidop }} {{ pago.idestudiante.apellidom }}</td>
+                <td>{{ pago.idestudiante.nocontrol }}</td>
+                <td>{{ pago.idperiodo.periodo }}</td>
+                <td>{{ pago.idmateria.nombremateria }}</td>
+                <td id="estado-{{pago.foliopago}}">
+                  {% if pago.idestado.estado == 'Pendiente' %}➖{% endif %}
+                  {% if pago.idestado.estado == 'Aceptado' %}✅{% endif %}
+                  {% if pago.idestado.estado == 'No aceptado' %}⛔{% endif %}
+                  {{ pago.idestado }}
+                </td>
+                  <td>
+                    <a onclick="abrir_modal_edicion('{% url 'ingles:editar_pago2' pago.foliopago %}')">
+                      <i class="fa-solid fa-pencil" style="font-size:20px;color:rgb(255, 174, 0);"></i>
+                    </a>
+                    <a href="/admin/ingles/pago/{{pago.foliopago}}/change/" target="_blank">
+                      <i class="fa-solid fa-folder" style="font-size:20px;color:rgb(255, 140, 32);"></i>
+                    </a>
+                    <i id="comment-icon-{{pago.foliopago}}" class="fa-solid fa-message" style="font-size:20px;{% if pago.descripcion.strip != '' %}color:rgb(46, 63, 255);{% else %}color:rgb(160, 160, 160);{% endif %}" title="{% if pago.descripcion.strip != '' %}Hay comentarios.{% else %}Sin comentarios.{% endif %}"></i>
+                  </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+
+            <!--  Page content-->
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% else %}
+<h1>Ora ora ._. </h1>
+{% endif%}
+
+
+
+
+<div class="modal fade" id="creacion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+  role="dialog">
+
+</div>
+<div class="modal fade" id="edicion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog">
+
+</div>
+{% block extrajs %}
+<script type="text/javascript">
+  function abrir_modal_edicion(url) {
+    $('#edicion').load(url, function () {
+      $(this).modal('show');
+    });
+  }
+  function abrir_modal_creacion(url) {
+    $('#creacion').load(url, function () {
+      $(this).modal('show');
+    });
+  }
+  $('#myModal').modal(options)
+</script>
+{% endblock extrajs %}
+
+
+{% block javascripts %}
+<script type="text/javascript"> 
+  $(document).ready(function () {
+    // Función para obtener y establecer valores de localStorage
+    function guardarSeleccion() {
+      var periodoSelect = $('#periodoSelect').val();
+      var estadoSelect = $('#estadoSelect').val();
+      // Guardar en localStorage
+      localStorage.setItem('periodoSelect', periodoSelect);
+      localStorage.setItem('estadoSelect', estadoSelect);
+    }
+
+    // Configuración inicial de DataTable
+    $('#data').DataTable({
+      "language": {
+        url: "{% static 'lib/spanish.txt' %}"
+      },
+    });
+
+    // Restaurar valores desde localStorage al cargar la página
+    var storedPeriodo = localStorage.getItem('periodoSelect');
+    var storedEstado = localStorage.getItem('estadoSelect');
+    
+    if (storedPeriodo) {
+      $('#periodoSelect').val(storedPeriodo);
+    }
+    if (storedEstado) {
+      $('#estadoSelect').val(storedEstado);
+    }
+
+    // Evento de cambio en los selects para guardar la selección
+    $('#periodoSelect, #estadoSelect').on('change', function () {
+      guardarSeleccion();
+    });
+
+    // Evento de click en el botón Filtrar
+    $('#filtrarBtn').on('click', function () {
+      guardarSeleccion();
+      filtrarTabla();
+    });
+  });
+</script>
+<script>
+
+  // Función para filtrar la tabla
+  function filtrarTabla() {
+    var periodoSelect = document.getElementById('periodoSelect').value;
+    var estadoSelect = document.getElementById('estadoSelect').value;
+
+    var baseUrl = "{% url 'ingles:listar_financiero' 'default' %}";
+
+    var url = baseUrl;
+
+    // Agregar parámetros seleccionados a la URL
+    url += '&' + encodeURIComponent(periodoSelect || 'all');
+    url += '&' + encodeURIComponent(estadoSelect || 'all');
+
+    // Redireccionar a la nueva URL
+    window.location.href = url;
+  }
+
+  // Mostrar mensaje de carga al hacer clic en botones
+  const loadLinks = document.querySelectorAll('.load-link');
+    
+  loadLinks.forEach(link => {
+    link.addEventListener('click', function(event) {
+      document.getElementById('loading-message').style.display = 'block';
+    });
+  });
+
+  function exportToExcel() {
+    var pagosData = [{% for pago in pagos %}
+        {
+          fechapago: "{{ pago.fechapago|escapejs }}",
+          monto: "{{ pago.monto|escapejs }}",
+          estudiante: "{{ pago.idestudiante.nombre|escapejs }} {{ pago.idestudiante.apellidop|escapejs }} {{ pago.idestudiante.apellidom|escapejs }}",
+          nocontrol: "{{ pago.idestudiante.nocontrol|escapejs }}",
+          periodo: "{{ pago.idperiodo.periodo|escapejs }}",
+          materia: "{{ pago.idmateria.nombremateria|escapejs }}",
+          estado: "{{pago.idestado.estado|escapejs}}",
+          descripcion: "{{pago.descripcion|escapejs}}"
+        },
+        {% endfor %}
+    ];
+    
+    // Crear un libro de Excel
+    var wb = XLSX.utils.book_new();
+    var ws = XLSX.utils.json_to_sheet(pagosData);
+
+    // Agregar la hoja al libro
+    XLSX.utils.book_append_sheet(wb, ws, 'Pagos');
+
+    // Guardar el archivo Excel
+    var today = new Date();
+    var filename = 'Pagos_' + today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + '.xlsx';
+    XLSX.writeFile(wb, filename);
+
+    // Ocultar el mensaje de carga después de exportar
+    document.getElementById('loading-message').style.display = 'none';
+  }
+
+  function exportToPDF() {
+    if (typeof pdfMake !== 'undefined') {
+      var headers = ['Fecha', 'Monto', 'Estudiante', 'No. Control', 'Periodo', 'Materia', 'Estado'];
+      var body = [];
+
+      {% for pago in pagos %}
+        body.push([
+          "{{ pago.fechapago|escapejs }}",
+          "{{ pago.monto|escapejs }}",
+          "{{ pago.idestudiante.nombre|escapejs }} {{ pago.idestudiante.apellidop|escapejs }} {{ pago.idestudiante.apellidom|escapejs }}",
+          "{{ pago.idestudiante.nocontrol|escapejs }}",
+          "{{ pago.idperiodo.periodo|escapejs }}",
+          "{{ pago.idmateria.nombremateria|escapejs }}",
+          "{{ pago.idestado.estado|escapejs }}"
+        ]);
+      {% endfor %}
+
+      var docDefinition = {
+        content: [
+          { text: 'Reporte de Pagos | {{titulo|escapejs}}', style: 'header' },
+          {
+            style: 'tableExample',
+            table: {
+              widths: [90, 30, 120, 40, 80, 30, 40],
+              headers: headers,
+              body: body
+            },
+            fontSize: 8
+          }
+        ],
+        styles: {
+          header: {
+            fontSize: 12,
+            bold: true,
+            margin: [0, 0, 0, 10]
+          },
+          tableExample: {
+            margin: [0, 5, 0, 15],
+            fontSize: 8
+          }
+        }
+      };
+
+      pdfMake.createPdf(docDefinition).open();
+    } else {
+      console.error('pdfMake is not defined');
+    }
+  }
+</script>
+
+<!-- AJAX polling script for messages -->
+<script>
+  function fetchMessages() {
+    $.ajax({
+      url: "{% url 'ingles:fetch_messages' %}", // URL of the view that returns messages
+      type: "GET",
+      success: function (data) {
+        $("#messages-container").html(data);
+      },
+      complete: function () {
+        // Schedule the next request when the current one's complete
+        setTimeout(fetchMessages, 3000);
+      }
+    });
+  }
+
+  $(document).ready(function () {
+    fetchMessages(); // Initial call to fetch messages
+  });
+</script>
+
+<script>
+  function fetchCommentsStatus() {
+    fetch('{% url 'ingles:fetch_comments_status' %}')
+      .then(response => response.json())
+      .then(data => {
+        data.comments_status.forEach(item => {
+          const icon = document.getElementById(`comment-icon-${item.foliopago}`);
+          if (icon) {
+            if (item.has_comments) {
+              icon.style.color = 'rgb(46, 63, 255)';
+              icon.title = 'Hay comentarios.';
+            } else {
+              icon.style.color = 'rgb(160, 160, 160)';
+              icon.title = 'Sin comentarios.';
+            }
+          }
+
+          const estadoCell = document.getElementById(`estado-${item.foliopago}`);
+          if (estadoCell) {
+            if (item.estado === 'Pendiente') {
+              estadoCell.innerHTML = '➖ Pendiente';
+            } else if (item.estado === 'Aceptado') {
+              estadoCell.innerHTML = '✅ Aceptado';
+            } else if (item.estado === 'No aceptado') {
+              estadoCell.innerHTML = '⛔ No aceptado';
+            }
+          }
+        });
+      })
+      .catch(error => console.error('Error al obtener el estado de los comentarios y pagos:', error));
+  }
+
+  // Llamar fetchCommentsStatus al cargar la página
+  document.addEventListener('DOMContentLoaded', fetchCommentsStatus);
+
+  // Configurar un temporizador para actualizar el estado de los comentarios y pagos periódicamente
+  setInterval(fetchCommentsStatus, 3000); // Actualizar cada 5 segundos (5000 milisegundos)
+</script>
+
+{% endblock javascripts %}
+
+{% endblock content %}

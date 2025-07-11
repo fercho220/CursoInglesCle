@@ -1,0 +1,123 @@
+{% extends "layouts/base-f.html" %}
+
+{% block title %} UI Calificar {% endblock %}
+
+<!-- Specific Page CSS goes HERE  enctype="multipart/form-data"-->
+{% block stylesheets %}
+
+<style>
+    * {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        border: 0;
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid black;
+        border-collapse: collapse;
+
+    }
+
+    th {
+        text-align: center;
+        font-size: 14px;
+    }
+
+    td {
+        font-size: 15px;
+    }
+
+    p {
+        font-size: 18px;
+        padding: 5px;
+        margin: 0%;
+    }
+
+    .img-gen {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="table-responsive">
+    
+    
+    {% if gruposdetalles %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title ">Calificar Grupo</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table ">
+                        <thead class=" text-primary">
+                            <th> </th>
+                            <!-- <th>#</th>
+                            <th>No. Control</th>
+                            <th>Estudiante</th>
+                            <th>Calificación</th> -->
+                            {% for grupodetalle in gruposdetalles %}
+                            {% if request.user.username == "Coordinador" or request.user == grupodetalle.idgrupo.iddocente.usuario %}
+
+                            {%if forloop.first%}
+                            <div class="img-gen">
+                                <p><b>FACILITADOR:</b> {{ grupodetalle.idgrupo.iddocente | upper}}</p>
+                                </p>
+                                <p><b>MODALIDAD:</b> {{ grupodetalle.idgrupo.idmodalidad | upper}} </p>
+                                <p><b>PERIODO:</b> {{grupodetalle.idperiodo | upper}}</p>
+                            </div>
+                            <div class="img-gen">
+                                <p><b>NIVEL:</b> {{grupodetalle.foliopago.idmateria}}</p>
+                                <p><b>GRUPO:</b> {{ grupodetalle.idgrupo.grupo}} </p>
+                                <p><b>AULA:</b> {{ grupodetalle.idgrupo.idaula}} </p>
+                                <p><b>HORARIO:</b> {{ grupodetalle.idgrupo.horario}} </p>
+                            </div>
+                            {%endif%}
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    {%if forloop.first%}
+                    <form method='POST' action="">
+                        {% csrf_token %}
+                        {{ formset.management_form }}
+                        {% for form in formset %}
+                            {{forloop.counter}}
+                            {{ form.as_table}}
+                        <br>
+                        {% endfor %}
+
+                        <button class="btn btn-outline-primary" type="submit">Guardar y Enviar</button>
+                    </form>
+                    {%endif%}
+                    {%else%}
+                    {%if forloop.first%}
+                    <h1>No tienes permisos para estar aquí.</h1>
+                    {%endif%}
+                    {%endif%}
+                    {% endfor %}
+                    {% else %}
+                    <h1>No Existen Estudiantes Registrados en el Grupos</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+
+{% block extrajs %}
+{% endblock extrajs %}
+{% endblock content %}

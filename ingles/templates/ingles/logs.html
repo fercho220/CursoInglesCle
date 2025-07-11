@@ -1,0 +1,48 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block title %} UI Tables {% endblock %}
+
+{% block content %}
+<div class="table-responsive">
+  {% if logs %}
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          <h4 class="card-title ">Logs</h4>
+        </div>
+        <div class="card-body">
+          <table class="table table-responsive" id="log-data">
+            <thead class="text-primary">
+              <tr>
+                <th style="width:7%">Usuario</th>
+                <th style="width:20%">Fecha</th>
+                <th style="width:7%">Acción</th>
+                <th style="width:40%">Objeto</th>
+                <th style="width:20%">Mensaje</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for log in logs %}
+              <tr>
+                <td>{{ log.user }}</td>
+                <td>{{ log.action_time }}</td>
+                <td style="background-color: {% if log.get_action_flag_display == 'Modificar' %}yellow{% elif log.get_action_flag_display == 'Eliminación' %}red{% elif log.get_action_flag_display == 'Adición' %}green{% endif %}">
+                    {{ log.get_action_flag_display }}
+                </td>
+                <td>{{ log.object_repr }}</td>
+                <td>{{ log.change_message }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <h1>No Existen Logs Registrados</h1>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

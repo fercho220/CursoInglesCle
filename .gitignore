@@ -1,0 +1,33 @@
+# Archivos de caché de Python
+__pycache__/
+*.pyc
+
+# Base de datos local
+db.sqlite3
+
+# Entorno virtual
+venv/
+.venv/
+env/
+.env/
+env.bak/
+venv.bak/
+
+# Archivos de dependencias y compilación
+*.egg-info/
+dist/
+build/
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Carpeta de archivos estáticos recolectados
+/staticfiles/
+
+# Carpeta de medios subidos por usuarios
+/media/
+
+# Archivos de configuración local o secretos
+.env
+local_settings.py

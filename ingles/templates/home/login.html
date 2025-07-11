@@ -3,7 +3,17 @@
 {% block title %} Login {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+
+<style>
+  .img-gen {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+</style>
+
+{% endblock stylesheets %}
 
 {% block content %}
 
@@ -12,7 +22,7 @@
     <div class="card">
       <div class="card-header card-header-primary">
         <h4 class="card-title">
-          Login
+          Iniciar sesión
         </h4>
       </div>
       <div class="card-body">
@@ -38,7 +48,7 @@
           <div class="row">
             <div class="col-md-12">
               <div class="form-group">
-                <label class="bmd-label-floating">Nombre de Usuario</label>
+                <label class="bmd-label-floating">Número de Control</label>
                 {{ form.username }}
               </div>
             </div>
@@ -56,11 +66,33 @@
           </div>
 
           <br />
+          <div class="img-gen">
+            <button type="submit" name="login" class="btn btn-primary pull-left">Entrar</button>
+            &nbsp; &nbsp;
 
-          <button type="submit" name="login" class="btn btn-primary pull-left">Login</button>
-          &nbsp; &nbsp;
+            <div>     
+              <span class="pull-right">
+                <a href="{% url 'password_reset' %}" class="text-primary">
+                  <h5 style="color: rgb(255, 0, 0);">¿Olvidaste tu contraseña?</h5>
+                </a>
+              </span>
+              <br>
+              <br>
+              <span class="pull-right">
+                <b>¿No tienes una cuenta?</b> <a href="{% url 'ingles:registro' %}" class="text-primary">
+                  <h7> <b>Registrate!</b> </h7>
+                </a>
+              </span>
+
+            </div>
+
+          </div>
+
+          <br>
           <span class="pull-right">
-            ¿No tienes una cuenta? <a href="{% url 'ingles:registro' %}" class="text-primary">Registrate</a>
+            <a href="{% url 'login1' %}" class="text-primary">
+              <h6> ¿Eres Facilitador?</h6>
+            </a>
           </span>
 
           <div class="clearfix"></div>

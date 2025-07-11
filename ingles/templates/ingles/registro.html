@@ -16,31 +16,117 @@
                 </h4>
             </div>
             <div class="card-body">
-
-                <h6 class="card-category">
-                    Agrega tus credenciales
-                </h6>
+                <h6 class="card-category">Agrega tus credenciales</h6>
                 <form role="form" action="" method="post" autocomplete="off">
+                    {% csrf_token %}
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="bmd-label-floating"></label>
-                                {% csrf_token %}
-                                {{ form }}
+                                <label class="bmd-label-floating">Número de Control</label>
+                                {{ form.username }}
+                            </div>
+                            <p>Obligatorio. <b>Ejemplo (14320105)</b> si no cuenta con número de control utilice su
+                                RFC.</p>
+                        </div>
+                    </div>
+                    <span class="text-danger">{{ form.username.errors }}</span>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="bmd-label-floating" autocomplete="off">Nombre(s)</label>
+                                {{ form.first_name }}
                             </div>
                         </div>
                     </div>
-                    
-                    <br />
+                    <span class="text-danger">{{ form.first_name.errors }}</span>
 
-                    <br />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">Apellido Paterno</label>
+                                {{ form.last_name }}
+                            </div>
+                        </div>
+                    </div>
+                    <span class="text-danger">{{ form.last_name.errors }}</span>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="bmd-label-floating" autocomplete="off">Apellido Materno</label>
+                                {{ form2.apellidom }}
+                            </div>
+                        </div>
+                    </div>
+                    <span class="text-danger">{{ form2.apellidom.errors }}</span>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="bmd-label-floating" autocomplete="off">Correo Institucional</label>
+                                {{ form.email }}
+                            </div>
+                            <p>
+                                Ingresar Correo Institucional. <b>Ejemplo (L14320105@acapulco.tecnm.mx)</b> </p>
+                        </div>
+                    </div>
+                    <span class="text-danger">{{ form.email.errors }}</span>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">Contraseña</label>
+                                {{ form.password1 }}
+                            </div>
+                            <p><b>Condiciones para su contraseña.</b></p>
+                            <ul>
+                                <li>Su contraseña no puede ser muy similar a su otra información personal.
+                                </li>
+                                <li>Su contraseña es muy corta. Debe contener al menos 8 caracteres.</li>
+                                <li>Su contraseña no puede ser una contraseña de uso común.</li>
+                                <li>Su contraseña no puede ser completamente numérica.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <span class="text-danger">{{ form.password1.errors }}</span>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">Confirmación de contraseña</label>
+                                {{ form.password2 }}
+                            </div>
+                            <p>Para verificar, introduzca la misma contraseña que introdujo antes.</p>
+                        </div>
+                    </div>
+                    <span class="text-danger">{{ form.password2.errors }}</span>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">Carrera</label>
+                                {{ form2.idcarrera }}
+                            </div>
+                        </div>
+                    </div>
+                    <span class="text-danger">{{ form2.idcarrera.errors }}</span>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">Genero</label>
+                                {{ form2.genero }}
+                            </div>
+                        </div>
+                    </div>
+                    <span class="text-danger">{{ form2.genero.errors }}</span>
+
                     <input type="submit" value="registrar" class="btn btn-primary pull-left">
-
                     &nbsp; &nbsp;
                     <span class="pull-right">
                         ¿Tienes una cuenta? <a href="{% url 'login' %}" class="text-primary">Login</a>
                     </span>
-
                     <div class="clearfix"></div>
 
                 </form>
@@ -53,4 +139,3 @@
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}{% endblock javascripts %}
-

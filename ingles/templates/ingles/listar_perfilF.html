@@ -1,0 +1,68 @@
+{% extends "layouts/base-f.html" %}
+
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<div class="table-responsive">
+  {% if Facilitador %}
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          <h4 class="card-title ">Perfil</h4>
+        </div>
+        <div class="card-body">
+          <table class="table">
+            <thead class=" text-primary">
+              <th>Nombre</th>
+              <th>Apellido Paterno</th>
+              <th>Apellido Materno</th>
+              <th>RFC</th>
+              <th>Cédula Profesional</th>
+              <th>Correo Electronico</th>
+              <th>Opciones</th>
+            </thead>
+            <tbody>
+              {% for Facilitado in Facilitador %}
+              <tr>
+                <td>{{ Facilitado.nombre }}</td>
+                <td>{{ Facilitado.apellidop }}</td>
+                <td>{{ Facilitado.apellidom }}</td>
+                <td>{{ Facilitado.rfc }}</td>
+                <td>{{ Facilitado.ced }}</td>
+                <td>{{ Facilitado.email }}</td>
+
+                <td>
+                  <button onclick="abrir_modal_edicion('{% url 'ingles:editar_facilitador' Facilitado.iddocente %}')"
+                    class="btn btn-outline-secondary">Actualizar</button>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <h1>No Existe Facilitador Registrado</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<div class="modal fade" id="edicion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog">
+
+</div>
+{% block extrajs %}
+<script type="text/javascript">
+  var $ = jQuery.noConflict();
+  function abrir_modal_edicion(url) {
+    $('#edicion').load(url, function () {
+      $(this).modal('show');
+    });
+  }
+</script>
+{% endblock extrajs %}
+{% endblock content %}

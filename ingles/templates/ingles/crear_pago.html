@@ -1,73 +1,79 @@
-<div class="modal-dialog modal-lg" role="document">
+
+<div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
         <div class="modal-header">
-            <h2 class="modal-title">Agregar Pago</h2>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+            <h3 class="modal-title"><b>Agregar al Grupo</b></h3>
+            <button type="button" class="btn-close btn-outline-danger" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
-        <form action="{% url 'curso:crear_pago'%}" id="pagoForm" data-cities-url="{% url 'curso:ajax_load_cities' %}"
-            method="POST" enctype='multipart/form-data'>
+        <form action="{% url 'curso:crear_pago'%}" id="pagoForm" data-cities-url="{% url 'curso:ajax_load_cities' %}" method="POST" enctype='multipart/form-data' onsubmit="return checkSubmit();">
             {% csrf_token %}
             <div class="modal-body">
                 {{ form.as_p }}
                 {{ form2.as_p }}
             </div>
             <div class="modal-footer">
-                <button class="btn btn-outline-danger" type="button" data-dismiss="modal">Cancelar</button>
-                <button class="btn btn-outline-primary" onclick="alerta()" type="submit">Confirmar</button>
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-outline-primary" id="submitButton">Confirmar</button>
             </div>
         </form>
-        <!-- <script>
-        function alerta(){
-            alert("Se ha registrado su pago y apareceras en el grupo cuando entregues el boucher")
-        }
-    </script> -->
-        <script>
-            $(function () {
-                const url = $("#pagoForm").attr("data-cities-url");  // get the url of the `load_cities` view
-                $("#id_idperiodo" && "#id_idmateria").change(function () {
-                    const periodo = $("#id_idperiodo").val();  // get the selected country ID from the HTML input
-                    const materia = $("#id_idmateria").val();  // get the selected country ID from the HTML input
-
-                    console.log(periodo);
-                    $.ajax({                       // initialize an AJAX request
-                        url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
-                        data: {
-                            'idperiodo': periodo,
-                            'idmateria': materia,     // add the country id to the GET parameters
-                        },
-                        success: function (data) {   // `data` is the return of the `load_cities` view function
-                            console.log(data);
-                            $("#id_idgrupo").html(data);
-
-                            /*
-                            let html_data = '<option value="">---------</option>';
-                            data.forEach(function (city) {
-                                html_data += `<option value="${city.id}">${city.name}</option>`
-                            });
-                            console.log(html_data);
-                            $("#id_city").html(html_data);
-                            */
-                        }
-                    });
-                })
-
-            });
-            // $("#id_idperiodo").change(function () {
-            //     const url = $("#pagoForm").attr("data-cities-url2");  // get the url of the `load_cities` view
-            //     const countryId = $(this).val();  // get the selected country ID from the HTML input
-            //     console.log(countryId);
-            //     $.ajax({                       // initialize an AJAX request
-            //         url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
-            //         data: {
-            //             'idperiodo': countryId       // add the country id to the GET parameters
-            //         },
-            //         success: function (data) {   // `data` is the return of the `load_cities` view function
-            //             $("#id_idgrupo").html(data);
-            //         }
-            //     });
-            // });
-        </script>
     </div>
 </div>
+
+<script>
+    let enviando = false;
+
+    function checkSubmit() {
+        if (!enviando) {
+            enviando = true;
+            document.getElementById("submitButton").disabled = true;
+            return validateForm();
+        } else {
+            alert("El formulario ya se está enviando");
+            return false;
+        }
+    }
+
+    function validateForm() {
+        let isValid = true;
+        let form = document.getElementById("pagoForm");
+        let inputs = form.querySelectorAll("input, select, textarea");
+        
+        inputs.forEach(input => {
+            if (input.type !== "hidden" && !input.value) {
+                isValid = false;
+                input.style.borderColor = "red"; // Opcional: marcar campos vacíos
+            } else {
+                input.style.borderColor = ""; // Restablecer el estilo en caso de estar completo
+            }
+        });
+
+        if (!isValid) {
+            alert("Faltan campos por completar.");
+            enviando = false;
+            document.getElementById("submitButton").disabled = false;
+        }
+        return isValid;
+    }
+</script>
+
+<script>
+    $(function () {
+        const url = $("#pagoForm").attr("data-cities-url");
+        $("#id_idperiodo, #id_idmateria").change(function () {
+            const periodo = $("#id_idperiodo").val();
+            const materia = $("#id_idmateria").val();
+            console.log(periodo);
+            $.ajax({
+                url: url,
+                data: {
+                    'idperiodo': periodo,
+                    'idmateria': materia,
+                },
+                success: function (data) {
+                    console.log(data);
+                    $("#id_idgrupo").html(data);
+                }
+            });
+        });
+    });
+</script>

@@ -3,33 +3,38 @@
     justify-content: space-between;
     background: #102A57;
 } */
-.prin{
+.prin {
     display: flex;
     align-items: center;
 }
-.logo{
-    width: 250px;
+
+.logo {
+    width: 200px;
     height: 70px;
 }
-.ita{
+
+.ita {
     width: 100px;
     height: 70px;
 }
-.sep{
-    width: 300px;
+
+.sep {
+    width: 240px;
     height: 60px;
 }
-.principal{
+
+.principal {
     width: 370px;
     height: 400px;
 }
 
-#form{
+#form {
     background-color: #798DA1;
-    border-radius: 15px; 
-    width: 350px; 
+    border-radius: 15px;
+    width: 350px;
     height: 300px;
 }
-.login-form #log{
+
+.login-form #log {
     text-align: center;
 }

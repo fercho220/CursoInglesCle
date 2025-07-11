@@ -1,0 +1,403 @@
+{% extends "layouts/base.html" %} 
+{% load static %} 
+{% block title %}Estadistica Grupo{% endblock %}
+
+{% block content %} 
+{% block head %}
+<!--  -->
+<script src="{% static 'lib/highcharts-11.0.1/highcharts.js' %}"></script>
+<script src="{% static 'lib/highcharts-11.0.1/modules/exporting.js' %}"></script>
+<script src="{% static 'lib/highcharts-11.0.1/modules/export-data.js'%}"></script>
+<script src="{% static 'lib/highcharts-11.0.1/modules/accessibility.js'%}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+  * {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  table,
+  th,
+  td {
+    {% comment %} border: 1px solid black; {% endcomment %}
+    border-collapse: collapse;
+    text-align: center;
+  }
+  th {
+    text-align: center;
+    font-size: 14px;
+  }
+  td {
+    font-size: 15px;
+    
+  }
+
+  p {
+    font-size: 18px;
+    padding: 5px;
+    margin: 0%;
+  }
+  .img-gen {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .highcharts-figure,
+  .highcharts-data-table table {
+      min-width: 310px;
+      max-width: 800px;
+      margin: 1em auto;
+  }
+  
+  #container {
+      height: 400px;
+  }
+  
+  .highcharts-data-table table {
+      font-family: Verdana, sans-serif;
+      border-collapse: collapse;
+      border: 1px solid #ebebeb;
+      margin: 10px auto;
+      text-align: center;
+      width: 100%;
+      max-width: 500px;
+  }
+  
+  .highcharts-data-table caption {
+      padding: 1em 0;
+      font-size: 1.2em;
+      color: #555;
+  }
+  
+  .highcharts-data-table th {
+      font-weight: 600;
+      padding: 0.5em;
+  }
+  
+  .highcharts-data-table td,
+  .highcharts-data-table th,
+  .highcharts-data-table caption {
+      padding: 0.5em;
+      border: 1px solid #ebebeb;
+  }
+  
+  .highcharts-data-table thead tr,
+  .highcharts-data-table tr:nth-child(even) {
+      background: #f8f8f8;
+  }
+  
+  .highcharts-data-table tr:hover {
+      background: #f1f7ff;
+  }
+
+</style>
+{% endblock stylesheets %}
+{% if request.user.is_superuser %}
+
+<div class="table-responsive">
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          {% for ped in gruposdetalles %}
+          {% if forloop.first %}
+          <h4 class="card-title"> Estadísticas del período | {{ped.idperiodo.periodo}}</h4>
+          {% endif %}
+          {% endfor %}
+        </div>
+        <div class="card-body">
+
+          <label>
+            <select onchange="window.location=this.options[this.selectedIndex].value" style="background-color:white; border-radius: 2px; border: solid 1px; padding: 11px; font-size: 12px;">
+              <option value="">SELECCIONE PERÍODO . .</option>
+              {% if periodos %}
+              {% for periodo in periodos %}
+                  <option value="{% url 'ingles:estadisticas_Global' periodo.idperiodo  %}"
+                    ><h5 style="font-size: 11px;">{{periodo.periodo}}</h5></option>
+              {% endfor %}
+              {% endif %}
+            </select>
+          </label>
+
+          {% for ped in gruposdetalles %}
+          {% if forloop.first %}
+          <hr size="5px" color="black" />
+          <h4>Un total de {{group}} estudiantes cursaron en el periodo {{ped.idperiodo.periodo}}</h4>
+
+          {% endif %}
+          {% endfor %}
+
+          {% if gruposdetalles %}
+          <hr size="5px" color="black" style="margin-top: 20px;"/>
+          <!-- Elemento canvas para dibujar el gráfico -->
+          <table style="margin-top: 20px;">
+            <tr>
+              <td><h4>Estudiantes por carrera</h4></td>
+              <td><h4>Estudiantes por nivel</h4></td>
+              <td><h4>Sexo de Estudiantes</h4></td>
+              <td><h4>Índice de aprobación</h4></td>
+            </tr>
+            <tr>
+            <td><canvas id="carrerEstudiantesChart" width="300" height="200"></canvas></td>
+            <td><canvas id="nivelEstudiantesChart" width="300" height="200"></canvas></td>
+            <td><canvas id="sexoEstudiantesChart" width="260" height="200"></canvas></td>
+            <td><canvas id="califEstudiantesChart" width="260" height="200"></canvas></td>
+            
+            </tr>
+          </table>        
+          <script>
+                  // Datos para el gráfico
+                  var sexoEstudiantesData = {
+                    labels: ['Masculino', 'Femenino','Sin especificar'],
+                    datasets: [{
+                      data: [{{group_male}}, {{group_female}},{{group_none}}], // Porcentaje de estudiantes masculinos y femeninos
+                      backgroundColor: [
+                        'blue', // Color para el sexo masculino
+                        'pink', // Color para el sexo femenino
+                        'gray'
+                      ]
+                    }]
+                  };
+              
+                  // Configuración del gráfico
+                  var sexoEstudiantesOptions = {
+
+            legend: {
+              display: true,
+              position: 'bottom',
+              labels: {
+                fontSize: 10
+              }
+            }
+          };
+              
+                  // Obtener el contexto del canvas
+                  var sexoEstudiantesCanvas = document.getElementById('sexoEstudiantesChart');
+              
+                  // Crear el gráfico de pastel
+                  var sexoEstudiantesChart = new Chart(sexoEstudiantesCanvas, {
+                    type: 'pie',
+                    data: sexoEstudiantesData,
+                    options: sexoEstudiantesOptions
+                  });
+          </script>
+          <script>
+                      // Datos para el gráfico
+                      var sexoEstudiantesData = {
+                        labels: ['Aprobados', 'Reprobados'],
+                        datasets: [{
+                          data: [{{aprobado}}, {{reprobado}}],
+                          backgroundColor: [
+                            '#a6c88c', 
+                            'gray' 
+                          ]
+                        }]
+                      };
+                  
+                      // Configuración del gráfico
+                      var sexoEstudiantesOptions = {
+    
+                legend: {
+                  display: true,
+                  position: 'bottom',
+                  labels: {
+                    fontSize: 10
+                  }
+                }
+              };
+                  
+                      // Obtener el contexto del canvas
+                      var sexoEstudiantesCanvas = document.getElementById('califEstudiantesChart');
+                  
+                      // Crear el gráfico de pastel
+                      var sexoEstudiantesChart = new Chart(sexoEstudiantesCanvas, {
+                        type: 'pie',
+                        data: sexoEstudiantesData,
+                        options: sexoEstudiantesOptions
+                      });
+          </script>
+          <script>
+                var sexoEstudiantesData = {
+                  labels: {{ carrera | safe }},
+                  datasets: [{
+                    data: {{ totales | safe }},
+              backgroundColor: [
+                '#041122', // Color para el primer segmento
+                '#f8f0af',
+                '#ac4a00',
+                '#259073', // Color para el segundo segmento
+                '#7fda89', // Color para el tercer segmento
+                '#c8e98e', // Color para el cuarto segmento
+                '#f88f79',
+                '#e6f99d', // Color para el quinto segmento
+                '#002930',
+                '#00c16c',
+                '#90ff17'
+
+              ]
+            }],
+          };
+
+                // Configuración del gráfico
+                var sexoEstudiantesOptions = {
+                  legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                      fontSize: 10
+                    }
+                  }
+                };
+
+                // Obtener el contexto del canvas
+                var sexoEstudiantesCanvas = document.getElementById('carrerEstudiantesChart');
+
+                // Crear el gráfico de pastel
+                var sexoEstudiantesChart = new Chart(sexoEstudiantesCanvas, {
+                  type: 'pie',
+                  data: sexoEstudiantesData,
+                  options: sexoEstudiantesOptions
+                });
+          </script>
+         <script>
+          var sexoEstudiantesData = {
+            labels: {{ niveles | safe }},
+            datasets: [{
+              data: {{ totalniveles | safe }},
+              backgroundColor: [
+                '#041122', // Color para el primer segmento
+                '#259073', // Color para el segundo segmento
+                '#7fda89', // Color para el tercer segmento
+                '#c8e98e', // Color para el cuarto segmento
+                '#e6f99d', // Color para el quinto segmento
+              ]
+            }],
+          };
+        
+          // Configuración del gráfico
+          var sexoEstudiantesOptions = {
+            legend: {
+              display: true,
+              position: 'bottom',
+              labels: {
+                fontSize: 10
+              }
+            }
+          };
+        
+          // Obtener el contexto del canvas
+          var sexoEstudiantesCanvas = document.getElementById('nivelEstudiantesChart');
+        
+          // Crear el gráfico de pastel
+          var sexoEstudiantesChart = new Chart(sexoEstudiantesCanvas, {
+            type: 'pie',
+            data: sexoEstudiantesData,
+            options: sexoEstudiantesOptions
+          });
+        </script>
+         <hr size="5px" color="black" style="margin-top: 30px;"/>
+
+          <table class="table">        
+            {% for grupodetalle in gruposdetalles %}
+            <tbody>
+            {% comment %} COMIENZA LA TABLA {% endcomment %}
+              <tr>
+                {% if grupodetalle.foliopago.idestado.estado == 'Aceptado' %} 
+               
+                {% comment %} <td>{{forloop.counter}}</td>
+                <!-- <td>{{ grupodetalle.calif }}</td> -->
+                <!-- {% if request.user.is_superuser %}
+                <td> <button onclick="abrir_modal_edicion('{% url 'ingles:editar_gruposdetalles' grupodetalle.id %}')"
+                    class="btn btn-outline-secondary btn-sm">Editar</button></td>
+                <td><a href="{% url 'ingles:eliminar_gruposdetalles' grupodetalle.id %}"
+                    class="btn btn-outline-danger btn-sm">Eliminar</a></td>
+                {% endif %} -->
+
+                <td style="text-align: center">{{nombrecarreras}}</td>
+                <td style="font-size: 18px">{{valo}}</td> {% endcomment %}
+               
+                {% endif %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <h1>No existen registros de estudiantes en este período</h1>
+        </div>
+      </div>
+    </div> 
+  </div> 
+</div>
+{% endif %}
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      {% comment %} AQUI INICIA LA GRAFICA id="container" (script) {% endcomment %}
+      <div id="container"></div> 
+      <p class="highcharts-description"> 
+        {% comment %} AGREGAR UN TEXTO EN TEMPLATE {% endcomment %} </p>
+    </div>
+  </div>
+</div>
+
+
+{% endif %}
+{% for ped in gruposdetalles %}
+{% if forloop.first %}
+
+<script type="application/javascript ">
+  Highcharts.chart('container', {
+    chart: {
+        type: 'column'
+    },
+    
+    title: {
+        text: 'Alumnos que cursaron en {{ped.idperiodo.periodo}}'
+    },
+    subtitle: {
+      text:null
+    },
+    xAxis: {
+        categories: [ {{ nombrecarreras|safe }} ],
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: null
+        }
+    },
+    legend: {
+        reversed: true
+    },
+    plotOptions: {
+        series: {
+            stacking: 'normal',
+            dataLabels: {
+                enabled: true //visualiza la cantidad
+            }
+        }
+    },
+    series: [{
+        showInLegend: false,
+        colorByPoint: true,
+        name: 'cant',
+        data: [ {{valo}} ]
+    } ]
+});
+</script>
+{% endif %}
+{% endfor %}
+
+{% endblock%}
+

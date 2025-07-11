@@ -1,20 +1,60 @@
 {% extends "layouts/base.html" %}
-
+{% load static %}
 {% block title %} UI Tables {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+<style>
+  * {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  table,
+  th,
+  td {
+    border: 1px solid black;
+    border-collapse: collapse;
+
+  }
+
+  th {
+    text-align: center;
+    font-size: 14px;
+  }
+
+  td {
+    font-size: 15px;
+  }
+
+  p {
+    font-size: 18px;
+    padding: 5px;
+    margin: 0%;
+  }
+
+  .img-gen {
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
+{% endblock stylesheets %}
 
 {% block content %}
 <h3> {{ estudiante.nombre | upper }} {{ estudiante.apellidop | upper }} {{ estudiante.apellidom | upper }}</h3>
-{% if request.user.is_superuser %}
+<!-- {% if request.user.is_superuser %}
 <div>
   <button class="btn btn-outline-primary" type="button"
     onclick="abrir_modal_creacion('{% url 'curso:crear_gruposdetallesadm' %}')">Agregar</button>
 </div>
-{% endif %}
+{% endif %} -->
 <div class="table-responsive">
-  {% if gruposdetalles %}
+  {% if context.gruposdetalles %}
   <div class="row">
     <div class="col-md-12">
       <div class="card">
@@ -22,41 +62,60 @@
           <h4 class="card-title ">Detalle Grupo</h4>
         </div>
         <div class="card-body">
-          <table class="table">
+          <table class="table" id="data">
             <thead class=" text-primary">
+              <th>Numero</th>
+              <th>No. Control</th>
               <th>Estudiante</th>
-              <!-- <th>Folio</th> -->
-              {% if request.user.is_superuser %}
-              <!-- <th>Calificación</th> -->
+              <th>Carrera</th>
+              <!-- {% if request.user.is_superuser %}
               <th>Opciones</th>
-              {% endif %}
-              
-              {% for grupodetalle in gruposdetalles %}
-
+              {% endif %} -->
+              {% for grupodetalle in context.gruposdetalles %}
               {%if forloop.first%}
-              <h3>Periodo: {{ grupodetalle.idperiodo}}</h3>
-              <h3>Grupo: {{grupodetalle.idgrupo}}</h3>
+              <div class="img-gen">
+                <p><b>FACILITADOR:</b> {{ grupodetalle.idgrupo.iddocente | upper}}</p>
+                </p>
+                <p><b>MODALIDAD:</b> {{ grupodetalle.idgrupo.idmodalidad | upper}} </p>
+                <p><b>PERIODO:</b> {{grupodetalle.idperiodo | upper}}</p>
+              </div>
+              <div class="img-gen">
+                <p><b>NIVEL:</b> {{grupodetalle.foliopago.idmateria}}</p>
+                <p><b>GRUPO:</b> {{ grupodetalle.idgrupo.grupo}} </p>
+                <p><b>AULA:</b> {{ grupodetalle.idgrupo.idaula}} </p>
+              </div>
+              <div class="img-gen">
+                <p><b>HORARIO:</b> {{ grupodetalle.idgrupo.horario}} </p>
+                <p><b>Estudiantes Inscritos:</b> {{context.var}}</p>
+                <p><b>Estudiantes Aceptados: </b>{{context.varA}}</p>
+
+              </div>
             </thead>
             <tbody>
               {%endif%}
-              <tr>
+              
                 {% if grupodetalle.foliopago.idestado.estado == 'Aceptado' %}
-                <td>{{ grupodetalle.idestudiante }}</td>
-                <!-- <td>{{ grupodetalle.foliopago }}</td> -->
-                <!-- <td>{{ grupodetalle.foliopago }}</td> -->
-                <td>{{ grupodetalle.calif }}</td>
-                {% if request.user.is_superuser %}
+                <tr>
+                <td>{{forloop.counter}}</td>
+                <td style="text-align: center; ">{{ grupodetalle.idestudiante.nocontrol }}</td>
+                <td style="font-size: 18px;">{{ grupodetalle.idestudiante | title }}</td>
+                <td style="text-align: center;">{{ grupodetalle.idestudiante.idcarrera }}</td>
+                <!-- {% if request.user.is_superuser %}
                 <td> <button onclick="abrir_modal_edicion('{% url 'ingles:editar_gruposdetalles' grupodetalle.id %}')"
-                    class="btn btn-outline-secondary">Editar</button></td>
+                    class="btn btn-outline-secondary btn-sm">Editar</button></td>
                 <td><a href="{% url 'ingles:eliminar_gruposdetalles' grupodetalle.id %}"
-                    class="btn btn-outline-danger">Eliminar</a></td>
-                {% endif %}
-                {% endif %}
+                    class="btn btn-outline-danger btn-sm">Eliminar</a></td>
+                {% endif %} -->
               </tr>
+                {% endif %}
+              
               {% endfor %}
             </tbody>
             <!-- <td><a href="{% url 'ingles:crear_grupos' %}">Detalle</a></td> Page content<td><a href="{% url 'ingles:crear_grupos' %}">Agregar</a></td>-->
           </table>
+          <div>
+            <h4 style="color: red;">La lista presenta a los estudiantes cuyos pagos han sido aprobados por el Departamento de Recursos Financieros.</h4>
+          </div>
           {% else %}
           <h1>No Existen Estudiantes Registrados en el Grupos</h1>
         </div>
@@ -72,7 +131,18 @@
 <div class="modal fade" id="edicion" role="dialog">
 
 </div>
-{% block extrajs %}
+{% block javascripts %}
+<script type="application/javascript">
+  $(document).ready(function () {
+    $('#data').DataTable({
+      "language": {
+        url: "{% static 'lib/spanish.txt' %}"
+      },
+
+    });
+  });
+</script>
+
 <script type="text/javascript">
   var $ = jQuery.noConflict();
   function abrir_modal_edicion(url) {
@@ -85,6 +155,7 @@
       $(this).modal('show');
     });
   } 
+
 </script>
-{% endblock extrajs %}
+{% endblock javascripts %}
 {% endblock content %}
