@@ -32,3 +32,4 @@ crispy-bootstrap4
 djangorestframework
 django-filter
 django-bootstrap-form
+crispy_forms
